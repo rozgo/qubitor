@@ -22,6 +22,8 @@ void qb_gamut_setup ( context_t* ctx )
     float view_ratio = ( float )( ctx->viewport[3] - ctx->viewport[1] ) /
     ( float )( ctx->viewport[2] - ctx->viewport[0] );
     
+    ctx->point_size = 10;
+    
     ctx->ortho_aabb.extents[1] = 2;
     ctx->ortho_aabb.extents[0] = ctx->ortho_aabb.extents[1] / view_ratio;
     ctx->ortho_aabb.extents[2] = 10;
@@ -109,9 +111,13 @@ void qb_gamut_pick ( context_t* ctx, vec3_t screen_pos, color_t color )
     
     float d = 1 / 16.0f;
     
-    world_pick[0] = ( screen_pos[0] / ctx->viewport[2] ) * ( ctx->ortho_aabb.extents[0] * 2 );
+    world_pick[0] = ( -screen_pos[0] / ctx->viewport[2] ) * ( ctx->ortho_aabb.extents[0] * 2 );
     world_pick[1] = ( screen_pos[1] / ctx->viewport[3] ) * ( ctx->ortho_aabb.extents[1] * 2 );
     world_pick[2] = 5;
+    
+//    aabb_t aabb2 = { world_pick[0], world_pick[1], world_pick[2], 0.5f, 0.5f, 0.5f };
+//    color_t cb = { 255, 255, 0, 255 };
+//    qb_cuboid_draw ( ctx, &aabb2, cb, 1, 1 );
     
     for ( int y = 0; y < 16; ++y )
     {
@@ -119,7 +125,9 @@ void qb_gamut_pick ( context_t* ctx, vec3_t screen_pos, color_t color )
         {
             for ( int x = 0; x < 16; ++x )
             {
-                vec3_t qbit_pos = { ( ( 15 - x ) * d + d / 2 ) - 0.5f, ( y * d + d / 2 ) - 0.5f, ( z * d + d / 2 ) - 0.5f };
+                if ( x > 0 && x < 15 && y > 0 && y < 15 && z > 0 && z < 15 ) continue;
+                
+                vec3_t qbit_pos = { ( ( x ) * d + d / 2 ) - 0.5f, ( ( y ) * d + d / 2 ) - 0.5f, ( ( 15 - z ) * d + d / 2 ) - 0.5f };
                 m4x4_t xform;
                 m4x4_identity ( xform );
                 
@@ -128,17 +136,21 @@ void qb_gamut_pick ( context_t* ctx, vec3_t screen_pos, color_t color )
                 m4x4_scale_by_vec3 ( xform, gtx->gamut_octant->scale );
                 m4x4_transform_point ( xform, qbit_pos );
                 
+//                aabb_t aabb = { qbit_pos[0], qbit_pos[1], qbit_pos[2], d * 0.3f, d * 0.3f, d * 0.3f };
+//                color_t c = { 0, 0, 255, 255 };
+//                qb_cuboid_draw ( ctx, &aabb, c, 1, 1 );
+                
                 float r = d;
                 if ( ( world_pick[0] - r ) < qbit_pos[0] && ( world_pick[0] + r ) > qbit_pos[0] && 
                      ( world_pick[1] - r ) < qbit_pos[1] && ( world_pick[1] + r ) > qbit_pos[1] )
                 {
-                    if ( -qbit_pos[2] < closest_dist )
+                    if ( qbit_pos[2] < closest_dist )
                     {
-                        closest_dist = -qbit_pos[2];
-                        color[0] = gtx->gamut_octant->qube->qbits[y][z][x][0] / 255.0f;
-                        color[1] = gtx->gamut_octant->qube->qbits[y][z][x][1] / 255.0f;
-                        color[2] = gtx->gamut_octant->qube->qbits[y][z][x][2] / 255.0f;
-                        color[3] = 1;
+                        closest_dist = qbit_pos[2];
+                        color[0] = gtx->gamut_octant->qube->qbits[y][z][x][0];
+                        color[1] = gtx->gamut_octant->qube->qbits[y][z][x][1];
+                        color[2] = gtx->gamut_octant->qube->qbits[y][z][x][2];
+                        color[3] = 255;
                     }
                 }
             }

@@ -26,7 +26,7 @@ extern GLuint qb_solid_tex_gl_id;
 
 vec_t qb_timer_elapsed ( void );
 
-typedef unsigned char color_t[4];
+typedef GLubyte color_t[4];
 
 vec_t* color_normalize ( const color_t in_color, vec4_t out_color );
 

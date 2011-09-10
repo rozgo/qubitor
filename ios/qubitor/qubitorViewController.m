@@ -47,7 +47,8 @@ CGFloat CGPointDist(CGPoint point1,CGPoint point2);
     epoch = [[NSDate date] retain];
     
     qb_qubes_init ( 128 );
-    qb_cuboids_init ( 1024 );
+    //qb_cuboids_init ( 1024 );
+    qb_cuboids_init ( 4096 );
     qb_octants_init ( 65536 );
     qb_render_init ();
     
@@ -256,8 +257,8 @@ vec_t qb_timer_elapsed () {
     glClear ( GL_DEPTH_BUFFER_BIT );
     qb_model_render ( model_ctx );
     
-    //glClear ( GL_DEPTH_BUFFER_BIT );
-    //qb_gamut_render ( gamut_ctx );
+    glClear ( GL_DEPTH_BUFFER_BIT );
+    qb_gamut_render ( gamut_ctx );
     
     glClear ( GL_DEPTH_BUFFER_BIT );
     qb_tools_render ( tools_ctx );

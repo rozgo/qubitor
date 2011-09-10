@@ -18,7 +18,7 @@ void qb_world_setup ( context_t* ctx )
 {
     assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_WORLD );
     
-    VectorSet ( ctx->camera_rot, -35.264f, 45 * 3, 0 );
+    VectorSet ( ctx->camera_rot, -35.264f, 45 * 1, 0 );
     VectorCopy ( ctx->camera_rot, ctx->camera_rot_trail );
     VectorSet ( ctx->camera_target, 0.5f, 0.5f, 0.5f );
     VectorCopy ( ctx->camera_target, ctx->camera_target_trail );
@@ -41,6 +41,7 @@ void qb_world_setup ( context_t* ctx )
     octant->qube = qube;
 
     pos[0] += 2;
+    //pos[2] -= 1;
     qube = qb_qube_from_image ( "assets/megaman" );
     qb_octant_expand ( ctx->octree_root, pos, &octant );
     assert ( octant );

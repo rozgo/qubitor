@@ -87,9 +87,9 @@ static void qb_qube_save_gpu ( qube_t* qube )
             {
                 if ( qube->qbits[y][z][x][3] == 255 )
                 {
-                    verts[qube->gl_count].pos[0] = ( 16 - x );
+                    verts[qube->gl_count].pos[0] = ( x + 1 );
                     verts[qube->gl_count].pos[1] = ( y + 1 );
-                    verts[qube->gl_count].pos[2] = ( z + 1 );
+                    verts[qube->gl_count].pos[2] = ( 16 - z );
                     verts[qube->gl_count].pos[3] = 0;
                     verts[qube->gl_count].col[0] = qube->qbits[y][z][x][0];
                     verts[qube->gl_count].col[1] = qube->qbits[y][z][x][1];
