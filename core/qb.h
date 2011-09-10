@@ -63,14 +63,14 @@ typedef struct qube_t
 typedef struct qube_vertex_t
 {
     GLubyte col[4];
-    GLfloat pos[3];
+    GLubyte pos[4];
     
 } qube_vertex_t;
 
 typedef struct
 {
     GLubyte uv[4];
-    GLfloat pos[3];
+    GLbyte pos[4];
     
 } solid_vertex_t;
 

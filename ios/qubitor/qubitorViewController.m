@@ -313,7 +313,7 @@ CGFloat CGPointDist(CGPoint point1,CGPoint point2)
             octant_t* octant = 0;
             if ( qb_pick_select ( world_ctx, screen_pos, &octant ) )
             {
-                qb_tools_world_select ( tools_ctx, octant );
+                //qb_tools_world_select ( tools_ctx, octant );
             }
         }
         else if ( touchedGamut )

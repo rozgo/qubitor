@@ -79,8 +79,6 @@ static void qb_qube_save_gpu ( qube_t* qube )
     qube_vertex_t verts[4096];
     qube->gl_count = 0;
     
-    float d = 1 / 16.0f;
-    
     for ( int y = 0; y < 16; ++y )
     {
         for ( int z = 0; z < 16; ++z )
@@ -89,9 +87,10 @@ static void qb_qube_save_gpu ( qube_t* qube )
             {
                 if ( qube->qbits[y][z][x][3] == 255 )
                 {
-                    verts[qube->gl_count].pos[0] = ( 15 - x) * d - 0.5f + d / 2;
-                    verts[qube->gl_count].pos[1] = ( y ) * d - 0.5f + d / 2;
-                    verts[qube->gl_count].pos[2] = ( z ) * d - 0.5f + d / 2;
+                    verts[qube->gl_count].pos[0] = ( 16 - x );
+                    verts[qube->gl_count].pos[1] = ( y + 1 );
+                    verts[qube->gl_count].pos[2] = ( z + 1 );
+                    verts[qube->gl_count].pos[3] = 0;
                     verts[qube->gl_count].col[0] = qube->qbits[y][z][x][0];
                     verts[qube->gl_count].col[1] = qube->qbits[y][z][x][1];
                     verts[qube->gl_count].col[2] = qube->qbits[y][z][x][2];
@@ -156,7 +155,7 @@ void qb_qube_render ( context_t* ctx, octant_t* octant, uint8_t top )
                 glBindBuffer ( GL_ARRAY_BUFFER, octant->qube->gl_id );
                 glVertexAttribPointer ( ATTRIB_COLOR, 3, GL_UNSIGNED_BYTE, 1, sizeof ( qube_vertex_t ), 0 );
                 glEnableVertexAttribArray ( ATTRIB_COLOR );
-                glVertexAttribPointer ( ATTRIB_POSITION, 3, GL_FLOAT, 0, sizeof ( qube_vertex_t ), ( ( GLubyte * )0 + ( 4 ) ) );
+                glVertexAttribPointer ( ATTRIB_POSITION, 3, GL_UNSIGNED_BYTE, 0, sizeof ( qube_vertex_t ), ( ( GLubyte * )0 + ( 4 ) ) );
                 glEnableVertexAttribArray ( ATTRIB_POSITION );
                 glDrawArrays ( GL_POINTS, 0, octant->qube->gl_count );
                 
@@ -208,7 +207,7 @@ void qb_qube_render_solid ( context_t* ctx, octant_t* octant, uint8_t top )
         glBindBuffer ( GL_ARRAY_BUFFER, qb_solid_gl_id );
         glVertexAttribPointer ( ATTRIB_UV, 2, GL_UNSIGNED_BYTE, 1, sizeof ( solid_vertex_t ), 0 );
         glEnableVertexAttribArray ( ATTRIB_UV );
-        glVertexAttribPointer ( ATTRIB_POSITION, 3, GL_FLOAT, 0, sizeof ( solid_vertex_t ), ( ( GLubyte * )0 + ( 4 ) ) );
+        glVertexAttribPointer ( ATTRIB_POSITION, 3, GL_BYTE, 0, sizeof ( solid_vertex_t ), ( ( GLubyte * )0 + ( 4 ) ) );
         glEnableVertexAttribArray ( ATTRIB_POSITION );
         glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER, qb_solid_idx_gl_id );
     }

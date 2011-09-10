@@ -81,23 +81,23 @@ void qb_world_setup ( context_t* ctx )
     octant->qube = qube;
     octant->rotation[1] = 90;
     
-//    qube = qb_qube_from_image ( "assets/grass" );
-//    
-//    int s = 16;
-//    
-//    for ( int x = -s; x <= s; ++x )
-//    {
-//        for ( int z = -s; z <= s; ++z )
-//        {
-//            pos[0] = x + 0.5f;
-//            pos[1] = 1.5f;
-//            pos[2] = z + 0.5f;
-//            qb_octant_expand ( ctx->octree_root, pos, &octant );
-//            assert ( octant );
-//            octant->qube = qube;
-//            octant->rotation[1] = rand() % 90 * 90;
-//        }
-//    }
+    qube = qb_qube_from_image ( "assets/grass" );
+    
+    int s = 16;
+    
+    for ( int x = -s; x <= s; ++x )
+    {
+        for ( int z = -s; z <= s; ++z )
+        {
+            pos[0] = x + 0.5f;
+            pos[1] = 1.5f;
+            pos[2] = z + 0.5f;
+            qb_octant_expand ( ctx->octree_root, pos, &octant );
+            assert ( octant );
+            octant->qube = qube;
+            octant->rotation[1] = rand() % 90 * 90;
+        }
+    }
 }
 
 extern int qb_qube_render_count;
