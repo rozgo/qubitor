@@ -1,3 +1,5 @@
+// author: rozgo
+
 #ifndef __GAMUT_H__
 #define __GAMUT_H__
 

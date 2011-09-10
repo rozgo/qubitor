@@ -1,3 +1,5 @@
+// author: rozgo
+
 #ifndef _QB_H
 #define _QB_H
 

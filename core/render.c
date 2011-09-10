@@ -1,3 +1,5 @@
+// author: rozgo
+
 #include "qb.h"
 
 GLint qb_gl_uniforms[NUM_UNIFORMS];

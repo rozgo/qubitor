@@ -1,3 +1,5 @@
+// author: rozgo
+
 #include "qb.h"
 
 octant_t* octants;

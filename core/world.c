@@ -1,3 +1,5 @@
+// author: rozgo
+
 #include "world.h"
 
 const uint8_t QB_CTX_TYPE_WORLD = 12;

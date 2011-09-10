@@ -1,3 +1,5 @@
+// author: rozgo
+
 #include "qb.h"
 
 void qb_context_init ( context_t* ctx )

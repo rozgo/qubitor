@@ -1,7 +1,8 @@
+// author: rozgo
+
 #include "tools.h"
 #include "model.h"
 #include "gamut.h"
-
 
 const uint8_t QB_CTX_TYPE_TOOLS = 87;
 

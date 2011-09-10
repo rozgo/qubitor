@@ -1,3 +1,5 @@
+// author: rozgo
+
 #include "model.h"
 
 const uint8_t QB_CTX_TYPE_MODEL = 21;

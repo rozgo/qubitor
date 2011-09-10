@@ -1,3 +1,5 @@
+// author: rozgo
+
 #include "qb.h"
 
 static qube_t* qubes;

@@ -1,3 +1,5 @@
+// author: rozgo
+
 #include "qb.h"
 
 vec_t* color_normalize ( const color_t in_color, vec4_t out_color )

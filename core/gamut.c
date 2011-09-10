@@ -1,3 +1,5 @@
+// author: rozgo
+
 #include "gamut.h"
 
 const uint8_t QB_CTX_TYPE_GAMUT = 56;
