@@ -1,0 +1,426 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		57082269141917EA00BB2009 /* octant.c in Sources */ = {isa = PBXBuildFile; fileRef = 57082268141917EA00BB2009 /* octant.c */; };
+		5708226E14191A6F00BB2009 /* qube.c in Sources */ = {isa = PBXBuildFile; fileRef = 5708226C14191A6F00BB2009 /* qube.c */; };
+		5708227114191D5200BB2009 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = 5708226F14191D5200BB2009 /* context.c */; };
+		5708227314191F5400BB2009 /* cuboid.c in Sources */ = {isa = PBXBuildFile; fileRef = 5708227214191F5400BB2009 /* cuboid.c */; };
+		573AF42814023BC9005371E9 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = 573AF42614023BC9005371E9 /* io.c */; };
+		573BF07B13FF25B300E5B769 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 573BF07A13FF25B300E5B769 /* UIKit.framework */; };
+		573BF07D13FF25B300E5B769 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 573BF07C13FF25B300E5B769 /* Foundation.framework */; };
+		573BF07F13FF25B300E5B769 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 573BF07E13FF25B300E5B769 /* CoreGraphics.framework */; };
+		573BF08113FF25B300E5B769 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 573BF08013FF25B300E5B769 /* QuartzCore.framework */; };
+		573BF08313FF25B300E5B769 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 573BF08213FF25B300E5B769 /* OpenGLES.framework */; };
+		573BF08913FF25B400E5B769 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 573BF08713FF25B400E5B769 /* InfoPlist.strings */; };
+		573BF08B13FF25B400E5B769 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 573BF08A13FF25B400E5B769 /* main.m */; };
+		573BF08F13FF25B400E5B769 /* qubitorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 573BF08E13FF25B400E5B769 /* qubitorAppDelegate.m */; };
+		573BF09213FF25B400E5B769 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 573BF09013FF25B400E5B769 /* MainWindow.xib */; };
+		573BF09913FF25B400E5B769 /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 573BF09813FF25B400E5B769 /* EAGLView.m */; };
+		573BF09C13FF25B400E5B769 /* qubitorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 573BF09B13FF25B400E5B769 /* qubitorViewController.m */; };
+		573BF09F13FF25B400E5B769 /* qubitorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 573BF09D13FF25B400E5B769 /* qubitorViewController.xib */; };
+		5764718A140617CD00F93E50 /* model.c in Sources */ = {isa = PBXBuildFile; fileRef = 57647188140617CD00F93E50 /* model.c */; };
+		577AFF0213FF2F2800996E2B /* qb.c in Sources */ = {isa = PBXBuildFile; fileRef = 577AFEFE13FF2F2800996E2B /* qb.c */; };
+		577AFF1413FF334B00996E2B /* bbox.c in Sources */ = {isa = PBXBuildFile; fileRef = 577AFF0D13FF334B00996E2B /* bbox.c */; };
+		577AFF1613FF334B00996E2B /* m4x4.c in Sources */ = {isa = PBXBuildFile; fileRef = 577AFF1013FF334B00996E2B /* m4x4.c */; };
+		577AFF1713FF334B00996E2B /* mathlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 577AFF1113FF334B00996E2B /* mathlib.c */; };
+		577AFF1813FF334B00996E2B /* ray.c in Sources */ = {isa = PBXBuildFile; fileRef = 577AFF1313FF334B00996E2B /* ray.c */; };
+		577AFF2813FF3EE400996E2B /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 577AFF2713FF3EE400996E2B /* assets */; };
+		57CDBDB41408B50B0029C8CB /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 57CDBDB21408B50B0029C8CB /* render.c */; };
+		57CDBDC1140B586D0029C8CB /* gamut.c in Sources */ = {isa = PBXBuildFile; fileRef = 57CDBDBF140B586C0029C8CB /* gamut.c */; };
+		57DEAD0C1404CA3700DC2E49 /* world.c in Sources */ = {isa = PBXBuildFile; fileRef = 57DEAD0A1404CA3700DC2E49 /* world.c */; };
+		57DEAD101404CA5F00DC2E49 /* tools.c in Sources */ = {isa = PBXBuildFile; fileRef = 57DEAD0E1404CA5F00DC2E49 /* tools.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		57082268141917EA00BB2009 /* octant.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = octant.c; path = ../core/octant.c; sourceTree = "<group>"; };
+		5708226C14191A6F00BB2009 /* qube.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = qube.c; path = ../core/qube.c; sourceTree = "<group>"; };
+		5708226F14191D5200BB2009 /* context.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = context.c; path = ../core/context.c; sourceTree = "<group>"; };
+		5708227214191F5400BB2009 /* cuboid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cuboid.c; path = ../core/cuboid.c; sourceTree = "<group>"; };
+		573AF42614023BC9005371E9 /* io.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = io.c; path = ../core/io.c; sourceTree = "<group>"; };
+		573BF07613FF25B300E5B769 /* qubitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qubitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		573BF07A13FF25B300E5B769 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		573BF07C13FF25B300E5B769 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		573BF07E13FF25B300E5B769 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		573BF08013FF25B300E5B769 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		573BF08213FF25B300E5B769 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		573BF08613FF25B400E5B769 /* qubitor-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "qubitor-Info.plist"; sourceTree = "<group>"; };
+		573BF08813FF25B400E5B769 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		573BF08A13FF25B400E5B769 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		573BF08C13FF25B400E5B769 /* qubitor-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "qubitor-Prefix.pch"; sourceTree = "<group>"; };
+		573BF08D13FF25B400E5B769 /* qubitorAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = qubitorAppDelegate.h; sourceTree = "<group>"; };
+		573BF08E13FF25B400E5B769 /* qubitorAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = qubitorAppDelegate.m; sourceTree = "<group>"; };
+		573BF09113FF25B400E5B769 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		573BF09713FF25B400E5B769 /* EAGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
+		573BF09813FF25B400E5B769 /* EAGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
+		573BF09A13FF25B400E5B769 /* qubitorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = qubitorViewController.h; sourceTree = "<group>"; };
+		573BF09B13FF25B400E5B769 /* qubitorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = qubitorViewController.m; sourceTree = "<group>"; };
+		573BF09E13FF25B400E5B769 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/qubitorViewController.xib; sourceTree = "<group>"; };
+		57647188140617CD00F93E50 /* model.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = model.c; path = ../core/model.c; sourceTree = "<group>"; };
+		5764718C1406194A00F93E50 /* model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model.h; path = ../core/model.h; sourceTree = "<group>"; };
+		577AFEFE13FF2F2800996E2B /* qb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = qb.c; path = ../core/qb.c; sourceTree = "<group>"; };
+		577AFEFF13FF2F2800996E2B /* qb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qb.h; path = ../core/qb.h; sourceTree = "<group>"; };
+		577AFF0D13FF334B00996E2B /* bbox.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bbox.c; sourceTree = "<group>"; };
+		577AFF0E13FF334B00996E2B /* bytebool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bytebool.h; sourceTree = "<group>"; };
+		577AFF1013FF334B00996E2B /* m4x4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m4x4.c; sourceTree = "<group>"; };
+		577AFF1113FF334B00996E2B /* mathlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mathlib.c; sourceTree = "<group>"; };
+		577AFF1213FF334B00996E2B /* mathlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mathlib.h; sourceTree = "<group>"; };
+		577AFF1313FF334B00996E2B /* ray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ray.c; sourceTree = "<group>"; };
+		577AFF2713FF3EE400996E2B /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
+		57CDBDB21408B50B0029C8CB /* render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = render.c; path = ../core/render.c; sourceTree = "<group>"; };
+		57CDBDBF140B586C0029C8CB /* gamut.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gamut.c; path = ../core/gamut.c; sourceTree = "<group>"; };
+		57CDBDC0140B586D0029C8CB /* gamut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gamut.h; path = ../core/gamut.h; sourceTree = "<group>"; };
+		57DEAD0A1404CA3700DC2E49 /* world.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = world.c; path = ../core/world.c; sourceTree = "<group>"; };
+		57DEAD0B1404CA3700DC2E49 /* world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = world.h; path = ../core/world.h; sourceTree = "<group>"; };
+		57DEAD0E1404CA5F00DC2E49 /* tools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tools.c; path = ../core/tools.c; sourceTree = "<group>"; };
+		57DEAD0F1404CA5F00DC2E49 /* tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tools.h; path = ../core/tools.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		573BF07313FF25B300E5B769 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				573BF07B13FF25B300E5B769 /* UIKit.framework in Frameworks */,
+				573BF07D13FF25B300E5B769 /* Foundation.framework in Frameworks */,
+				573BF07F13FF25B300E5B769 /* CoreGraphics.framework in Frameworks */,
+				573BF08113FF25B300E5B769 /* QuartzCore.framework in Frameworks */,
+				573BF08313FF25B300E5B769 /* OpenGLES.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		573BF06B13FF25B300E5B769 = {
+			isa = PBXGroup;
+			children = (
+				577AFF2713FF3EE400996E2B /* assets */,
+				577AFF0C13FF334B00996E2B /* mathlib */,
+				577AFF0413FF2F3700996E2B /* core */,
+				573BF08413FF25B300E5B769 /* qubitor */,
+				573BF07913FF25B300E5B769 /* Frameworks */,
+				573BF07713FF25B300E5B769 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		573BF07713FF25B300E5B769 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				573BF07613FF25B300E5B769 /* qubitor.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		573BF07913FF25B300E5B769 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				573BF07A13FF25B300E5B769 /* UIKit.framework */,
+				573BF07C13FF25B300E5B769 /* Foundation.framework */,
+				573BF07E13FF25B300E5B769 /* CoreGraphics.framework */,
+				573BF08013FF25B300E5B769 /* QuartzCore.framework */,
+				573BF08213FF25B300E5B769 /* OpenGLES.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		573BF08413FF25B300E5B769 /* qubitor */ = {
+			isa = PBXGroup;
+			children = (
+				573BF08D13FF25B400E5B769 /* qubitorAppDelegate.h */,
+				573BF08E13FF25B400E5B769 /* qubitorAppDelegate.m */,
+				573BF09013FF25B400E5B769 /* MainWindow.xib */,
+				573BF09713FF25B400E5B769 /* EAGLView.h */,
+				573BF09813FF25B400E5B769 /* EAGLView.m */,
+				573BF09A13FF25B400E5B769 /* qubitorViewController.h */,
+				573BF09B13FF25B400E5B769 /* qubitorViewController.m */,
+				573BF09D13FF25B400E5B769 /* qubitorViewController.xib */,
+				573BF08513FF25B400E5B769 /* Supporting Files */,
+			);
+			path = qubitor;
+			sourceTree = "<group>";
+		};
+		573BF08513FF25B400E5B769 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				573BF08613FF25B400E5B769 /* qubitor-Info.plist */,
+				573BF08713FF25B400E5B769 /* InfoPlist.strings */,
+				573BF08A13FF25B400E5B769 /* main.m */,
+				573BF08C13FF25B400E5B769 /* qubitor-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		577AFF0413FF2F3700996E2B /* core */ = {
+			isa = PBXGroup;
+			children = (
+				577AFEFF13FF2F2800996E2B /* qb.h */,
+				577AFEFE13FF2F2800996E2B /* qb.c */,
+				5708227214191F5400BB2009 /* cuboid.c */,
+				5708226F14191D5200BB2009 /* context.c */,
+				5708226C14191A6F00BB2009 /* qube.c */,
+				57082268141917EA00BB2009 /* octant.c */,
+				573AF42614023BC9005371E9 /* io.c */,
+				57CDBDB21408B50B0029C8CB /* render.c */,
+				57DEAD0A1404CA3700DC2E49 /* world.c */,
+				57DEAD0B1404CA3700DC2E49 /* world.h */,
+				57DEAD0E1404CA5F00DC2E49 /* tools.c */,
+				57DEAD0F1404CA5F00DC2E49 /* tools.h */,
+				57647188140617CD00F93E50 /* model.c */,
+				5764718C1406194A00F93E50 /* model.h */,
+				57CDBDBF140B586C0029C8CB /* gamut.c */,
+				57CDBDC0140B586D0029C8CB /* gamut.h */,
+			);
+			name = core;
+			sourceTree = "<group>";
+		};
+		577AFF0C13FF334B00996E2B /* mathlib */ = {
+			isa = PBXGroup;
+			children = (
+				577AFF0D13FF334B00996E2B /* bbox.c */,
+				577AFF0E13FF334B00996E2B /* bytebool.h */,
+				577AFF1013FF334B00996E2B /* m4x4.c */,
+				577AFF1113FF334B00996E2B /* mathlib.c */,
+				577AFF1213FF334B00996E2B /* mathlib.h */,
+				577AFF1313FF334B00996E2B /* ray.c */,
+			);
+			name = mathlib;
+			path = ../mathlib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		573BF07513FF25B300E5B769 /* qubitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 573BF0A213FF25B400E5B769 /* Build configuration list for PBXNativeTarget "qubitor" */;
+			buildPhases = (
+				573BF07213FF25B300E5B769 /* Sources */,
+				573BF07313FF25B300E5B769 /* Frameworks */,
+				573BF07413FF25B300E5B769 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = qubitor;
+			productName = qubitor;
+			productReference = 573BF07613FF25B300E5B769 /* qubitor.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		573BF06D13FF25B300E5B769 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Alexander Orozco";
+			};
+			buildConfigurationList = 573BF07013FF25B300E5B769 /* Build configuration list for PBXProject "qubitor" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 573BF06B13FF25B300E5B769;
+			productRefGroup = 573BF07713FF25B300E5B769 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				573BF07513FF25B300E5B769 /* qubitor */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		573BF07413FF25B300E5B769 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				573BF08913FF25B400E5B769 /* InfoPlist.strings in Resources */,
+				573BF09213FF25B400E5B769 /* MainWindow.xib in Resources */,
+				573BF09F13FF25B400E5B769 /* qubitorViewController.xib in Resources */,
+				577AFF2813FF3EE400996E2B /* assets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		573BF07213FF25B300E5B769 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				573BF08B13FF25B400E5B769 /* main.m in Sources */,
+				573BF08F13FF25B400E5B769 /* qubitorAppDelegate.m in Sources */,
+				573BF09913FF25B400E5B769 /* EAGLView.m in Sources */,
+				573BF09C13FF25B400E5B769 /* qubitorViewController.m in Sources */,
+				577AFF0213FF2F2800996E2B /* qb.c in Sources */,
+				577AFF1413FF334B00996E2B /* bbox.c in Sources */,
+				577AFF1613FF334B00996E2B /* m4x4.c in Sources */,
+				577AFF1713FF334B00996E2B /* mathlib.c in Sources */,
+				577AFF1813FF334B00996E2B /* ray.c in Sources */,
+				573AF42814023BC9005371E9 /* io.c in Sources */,
+				57DEAD0C1404CA3700DC2E49 /* world.c in Sources */,
+				57DEAD101404CA5F00DC2E49 /* tools.c in Sources */,
+				5764718A140617CD00F93E50 /* model.c in Sources */,
+				57CDBDB41408B50B0029C8CB /* render.c in Sources */,
+				57CDBDC1140B586D0029C8CB /* gamut.c in Sources */,
+				57082269141917EA00BB2009 /* octant.c in Sources */,
+				5708226E14191A6F00BB2009 /* qube.c in Sources */,
+				5708227114191D5200BB2009 /* context.c in Sources */,
+				5708227314191F5400BB2009 /* cuboid.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		573BF08713FF25B400E5B769 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				573BF08813FF25B400E5B769 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		573BF09013FF25B400E5B769 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				573BF09113FF25B400E5B769 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		573BF09D13FF25B400E5B769 /* qubitorViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				573BF09E13FF25B400E5B769 /* en */,
+			);
+			name = qubitorViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		573BF0A013FF25B400E5B769 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander Orozco (S522L7J95A)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4F4FB41D-0B9B-499D-ACF2-856DD3EFA65E";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		573BF0A113FF25B400E5B769 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		573BF0A313FF25B400E5B769 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "qubitor/qubitor-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "qubitor/qubitor-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		573BF0A413FF25B400E5B769 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "qubitor/qubitor-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "qubitor/qubitor-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		573BF07013FF25B300E5B769 /* Build configuration list for PBXProject "qubitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				573BF0A013FF25B400E5B769 /* Debug */,
+				573BF0A113FF25B400E5B769 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		573BF0A213FF25B400E5B769 /* Build configuration list for PBXNativeTarget "qubitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				573BF0A313FF25B400E5B769 /* Debug */,
+				573BF0A413FF25B400E5B769 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 573BF06D13FF25B300E5B769 /* Project object */;
+}
