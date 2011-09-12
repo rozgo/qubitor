@@ -56,7 +56,7 @@ void qb_tools_setup ( context_t* ctx )
     qube_t* clone;
     
     ttx->buttons[0] = qb_qube_from_image ( "assets/tools" );
-    VectorSet ( pos, -0.5f, 0.5f, 0.5f );
+    VectorSet ( pos, 0.5f, 0.5f, 0.5f );
     qb_octant_expand ( ctx->octree_root, pos, &ttx->octants[0] );
     assert ( ttx->octants[0] );
     ttx->octants[0]->qube = ttx->buttons[0];
@@ -67,7 +67,7 @@ void qb_tools_setup ( context_t* ctx )
     
     for ( int i = 1; i < NUM_TOOLS_BUTTONS; ++i )
     {
-        VectorSet ( pos, -0.5f - i, 0.5f, 0.5f );
+        VectorSet ( pos, 0.5f + i, 0.5f, 0.5f );
         ttx->buttons[i] = ttx->buttons[i-1]->next_frame;
         qb_octant_expand ( ctx->octree_root, pos, &ttx->octants[i] );
         assert ( ttx->octants[i] );
@@ -310,7 +310,7 @@ void qb_tools_render ( context_t* ctx )
                 0, ctx->ortho_aabb.extents[1] * 2,
                 0, ctx->ortho_aabb.extents[2] * 2 );
     
-    vec3_t eye = { 0, 0, -10 };
+    vec3_t eye = { 0, 0, 10 };
     vec3_t look = { 0, 0, 0 };
     vec3_t up = { 0, 1, 0 };
     m4x4_look_at ( ctx->view_mat, eye, look, up );

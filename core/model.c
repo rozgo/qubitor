@@ -130,7 +130,7 @@ void qb_model_set ( context_t* ctx, octant_t* octant )
                         vec3_t pos;
                         pos[0] = 8.5f - ( 16 - x );
                         pos[1] = 8.5f - ( 16 - y );
-                        pos[2] = 8.5f - ( z + 1 );
+                        pos[2] = 8.5f - ( 16 - z );
                         
                         octant_t* bit_octant = 0;
                         qb_octant_expand ( ctx->octree_root, pos, &bit_octant );
@@ -173,7 +173,7 @@ void qb_model_set ( context_t* ctx, octant_t* octant )
                         vec3_t pos;
                         pos[0] = 8.5f - ( 16 - x );
                         pos[1] = 8.5f - ( 16 - y );
-                        pos[2] = 8.5f - ( z + 1 );
+                        pos[2] = 8.5f - ( 16 - z );
                         
                         octant_t* bit_octant = 0;
                         qb_octant_intersect_point ( ctx->octree_root, pos, &bit_octant );

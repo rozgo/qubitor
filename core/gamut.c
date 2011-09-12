@@ -31,7 +31,7 @@ void qb_gamut_setup ( context_t* ctx )
     ctx->ortho_aabb.origin[1] = ctx->ortho_aabb.extents[1];
     ctx->ortho_aabb.origin[2] = -ctx->ortho_aabb.extents[2];
     
-    vec3_t pos = { -0.5f, ctx->ortho_aabb.extents[1] * 2 - 0.5f , 0.5f };
+    vec3_t pos = { 0.5f, ctx->ortho_aabb.extents[1] * 2 - 0.5f , 0.5f };
     gtx->gamut_octant = 0;
     
     qb_octant_expand ( ctx->octree_root, pos, &gtx->gamut_octant );
@@ -85,7 +85,7 @@ void qb_gamut_render ( context_t* ctx )
                 0, ctx->ortho_aabb.extents[1] * 2,
                 0, ctx->ortho_aabb.extents[2] * 2 );
     
-    vec3_t eye = { 0, 0, -10 };
+    vec3_t eye = { 0, 0, 10 };
     vec3_t look = { 0, 0, 0 };
     vec3_t up = { 0, 1, 0 };
     m4x4_look_at ( ctx->view_mat, eye, look, up );
@@ -111,7 +111,7 @@ void qb_gamut_pick ( context_t* ctx, vec3_t screen_pos, color_t color )
     
     float d = 1 / 16.0f;
     
-    world_pick[0] = ( -screen_pos[0] / ctx->viewport[2] ) * ( ctx->ortho_aabb.extents[0] * 2 );
+    world_pick[0] = ( screen_pos[0] / ctx->viewport[2] ) * ( ctx->ortho_aabb.extents[0] * 2 );
     world_pick[1] = ( screen_pos[1] / ctx->viewport[3] ) * ( ctx->ortho_aabb.extents[1] * 2 );
     world_pick[2] = 5;
     
@@ -127,7 +127,7 @@ void qb_gamut_pick ( context_t* ctx, vec3_t screen_pos, color_t color )
             {
                 if ( x > 0 && x < 15 && y > 0 && y < 15 && z > 0 && z < 15 ) continue;
                 
-                vec3_t qbit_pos = { ( ( x ) * d + d / 2 ) - 0.5f, ( ( y ) * d + d / 2 ) - 0.5f, ( ( 15 - z ) * d + d / 2 ) - 0.5f };
+                vec3_t qbit_pos = { ( ( x ) * d + d / 2 ) - 0.5f, ( ( y ) * d + d / 2 ) - 0.5f, ( ( z ) * d + d / 2 ) - 0.5f };
                 m4x4_t xform;
                 m4x4_identity ( xform );
                 
@@ -144,9 +144,9 @@ void qb_gamut_pick ( context_t* ctx, vec3_t screen_pos, color_t color )
                 if ( ( world_pick[0] - r ) < qbit_pos[0] && ( world_pick[0] + r ) > qbit_pos[0] && 
                      ( world_pick[1] - r ) < qbit_pos[1] && ( world_pick[1] + r ) > qbit_pos[1] )
                 {
-                    if ( qbit_pos[2] < closest_dist )
+                    if ( -qbit_pos[2] < closest_dist )
                     {
-                        closest_dist = qbit_pos[2];
+                        closest_dist = -qbit_pos[2];
                         color[0] = gtx->gamut_octant->qube->qbits[y][z][x][0];
                         color[1] = gtx->gamut_octant->qube->qbits[y][z][x][1];
                         color[2] = gtx->gamut_octant->qube->qbits[y][z][x][2];
