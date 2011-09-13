@@ -130,7 +130,7 @@ void qb_world_render ( context_t* ctx )
     
     for ( int i = 0; i < 10; ++i )
     {
-        float t = spline_time * 0.1f + i * 0.005f;
+        float t = spline_time * 0.1f + i * 0.01f;
         float int_part;
         t = modff ( t, &int_part );
         
