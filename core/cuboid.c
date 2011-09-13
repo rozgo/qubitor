@@ -70,8 +70,8 @@ void qb_cuboid_render ( context_t* ctx )
     glUseProgram ( qb_line_prog );
     
     glBindBuffer ( GL_ARRAY_BUFFER, qb_cuboid_gl_id );                
-    glVertexAttribPointer( ATTRIB_POSITION, 3, GL_FLOAT, 0, sizeof ( vec4_t ), 0);
-    glEnableVertexAttribArray( ATTRIB_POSITION );
+    glVertexAttribPointer ( ATTRIB_POSITION, 3, GL_FLOAT, 0, sizeof ( vec4_t ), 0);
+    glEnableVertexAttribArray ( ATTRIB_POSITION );
     
     vec4_t color;
     
@@ -106,4 +106,5 @@ void qb_cuboid_render ( context_t* ctx )
     glBindBuffer ( GL_ARRAY_BUFFER, 0 );
     glUseProgram ( 0 );
 }
+
 

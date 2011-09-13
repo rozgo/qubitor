@@ -249,7 +249,8 @@ vec_t qb_timer_elapsed () {
     
     glEnable ( GL_DEPTH_TEST );
     glEnable ( GL_CULL_FACE );
-    glClearColor ( 80/255.0f, 150/255.0f, 250/255.0f, 1 );
+    glClearColor ( 1, 1, 1, 1 );
+//    glClearColor ( 80/255.0f, 150/255.0f, 250/255.0f, 1 );
     
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     qb_world_render ( world_ctx );
@@ -805,6 +806,47 @@ CGFloat CGPointDist(CGPoint point1,CGPoint point2)
     return TRUE;
 }
 
+GLuint qb_load_texture ( const char* asset )
+{
+    GLuint gl_id = 0;
+    
+    NSString* path = [NSString stringWithCString:asset encoding:NSASCIIStringEncoding];
+    path = [[NSBundle mainBundle] pathForResource:path ofType:@"png"];
+    NSData *texData = [[NSData alloc] initWithContentsOfFile:path];
+    UIImage *image = [[UIImage alloc] initWithData:texData];
+    if (image != nil)
+    {
+        // Get Image size
+        GLuint width = CGImageGetWidth(image.CGImage);
+        GLuint height = CGImageGetHeight(image.CGImage);
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        // Allocate memory for image
+        void *imageData = malloc( height * width * 4 );
+        CGContextRef imgcontext = CGBitmapContextCreate(
+                                                        imageData, width, height, 8, 4 * width, colorSpace,
+                                                        kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+        CGColorSpaceRelease( colorSpace );
+        CGContextClearRect( imgcontext,
+                           CGRectMake( 0, 0, width, height ) );
+        CGContextTranslateCTM( imgcontext, 0, height - height );
+        CGContextDrawImage( imgcontext,
+                           CGRectMake( 0, 0, width, height ), image.CGImage );
+        
+        // use imageData
+        glGenTextures( 1, &gl_id );
+		glBindTexture( GL_TEXTURE_2D, gl_id );
+        glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData );
+        
+        // Release context
+        CGContextRelease(imgcontext);
+        // Free Stuff
+        free(imageData);
+        [image release];
+        [texData release];
+    }
+    
+    return gl_id;
+}
 
 qube_t* qb_qube_from_image ( const char* path )
 {
