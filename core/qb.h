@@ -23,6 +23,8 @@ extern GLuint qb_cuboid_gl_id;
 extern GLuint qb_solid_gl_id;
 extern GLuint qb_solid_idx_gl_id;
 extern GLuint qb_solid_tex_gl_id;
+extern GLuint qb_plane_gl_id;
+extern GLuint qb_plane_idx_gl_id;
 
 vec_t qb_timer_elapsed ( void );
 
@@ -165,6 +167,9 @@ cuboid_t* qb_cuboid_draw ( context_t* ctx, const aabb_t* aabb, color_t color, ui
 void qb_cuboid_render ( context_t* ctx );
 
 void qb_render_init ( void );
+void qb_aabb_render_solid ( context_t* ctx, aabb_t* aabb, GLuint tex_gl_id, GLenum cull_mode );
+void qb_render_plane ( context_t* ctx, GLuint tex_gl_id, m4x4_t xform );
+GLuint qb_load_texture ( const char* asset );
 
 #endif
 

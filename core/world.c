@@ -1,6 +1,7 @@
 // author: rozgo
 
 #include "world.h"
+#include "spline.h"
 
 const uint8_t QB_CTX_TYPE_WORLD = 12;
 
@@ -17,6 +18,7 @@ world_context_t* qb_world_context_create ( void )
 void qb_world_setup ( context_t* ctx )
 {
     assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_WORLD );
+    world_context_t* wtx = ( world_context_t* )ctx;
     
     VectorSet ( ctx->camera_rot, -35.264f, 45 * 1, 0 );
     VectorCopy ( ctx->camera_rot, ctx->camera_rot_trail );
@@ -81,36 +83,70 @@ void qb_world_setup ( context_t* ctx )
     octant->qube = qube;
     octant->rotation[1] = 90;
     
-//    qube = qb_qube_from_image ( "assets/grass" );
-//    
-//    int s = 16;
-//    
-//    for ( int x = -s; x <= s; ++x )
-//    {
-//        for ( int z = -s; z <= s; ++z )
-//        {
-//            pos[0] = x + 0.5f;
-//            pos[1] = 1.5f;
-//            pos[2] = z + 0.5f;
-//            qb_octant_expand ( ctx->octree_root, pos, &octant );
-//            assert ( octant );
-//            octant->qube = qube;
-//            octant->rotation[1] = rand() % 90 * 90;
-//        }
-//    }
+    qube = qb_qube_from_image ( "assets/grass" );
+    
+    int s = 8;
+    
+    for ( int x = -s; x <= s; ++x )
+    {
+        for ( int z = -s; z <= s; ++z )
+        {
+            pos[0] = x + 0.5f;
+            pos[1] = 1.5f;
+            pos[2] = z + 0.5f;
+            qb_octant_expand ( ctx->octree_root, pos, &octant );
+            assert ( octant );
+            octant->qube = qube;
+            octant->rotation[1] = rand() % 90 * 90;
+        }
+    }
+    
+
+    vec3_t extents = { 10, 2, 10 };
+    wtx->spline = qb_spline_from_random_elipse ( extents, 45, 1 );
+    wtx->spline->position[1] = -2;
+    wtx->spline->rotation[1] = 90;
+    
+    wtx->skybox_gl_id[0] = qb_load_texture ( "assets/skybox_sides" );
+    wtx->skybox_gl_id[1] = qb_load_texture ( "assets/skybox_top" );
 }
+
 
 extern int qb_qube_render_count;
 
 void qb_world_render ( context_t* ctx )
 {
     assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_WORLD );
+    world_context_t* wtx = ( world_context_t* )ctx;
     
     //TODO: unstatic
     static float render_time = 0;
     float dt = qb_timer_elapsed () - render_time;
     if ( dt > 0.03f ) dt = 0.03f;
     render_time = qb_timer_elapsed ();
+    
+    static float spline_time = 0;
+    spline_time += dt;
+    
+    for ( int i = 0; i < 10; ++i )
+    {
+        float t = spline_time * 0.1f + i * 0.01f;
+        float int_part;
+        t = modff ( t, &int_part );
+        
+        aabb_t cursor = { 0, 0, 0, 0.2f, 0.2f, 0.2f };
+        color_t red = { 255, 0, 0, 255 };
+        qb_spline_interpolate ( wtx->spline, cursor.origin, t );
+        
+        m4x4_t xform;
+        m4x4_identity ( xform );
+        m4x4_translate_by_vec3 ( xform, wtx->spline->position );
+        m4x4_rotate_by_vec3 ( xform, wtx->spline->rotation, eZYX );
+        m4x4_scale_by_vec3 ( xform, wtx->spline->scale );
+        m4x4_transform_point( xform, cursor.origin);
+        
+        qb_cuboid_draw ( ctx, &cursor, red, 5, 0 );        
+    }
     
     float ortho_dif = ctx->ortho_aabb.extents[0] - ctx->ortho_extents_trail;
     float ortho_vel = ortho_dif * 10 * dt;
@@ -170,6 +206,67 @@ void qb_world_render ( context_t* ctx )
     m4x4_identity ( ctx->view_proj_mat );
     m4x4_multiply_by_m4x4 ( ctx->view_proj_mat, ctx->proj_mat );
     m4x4_multiply_by_m4x4 ( ctx->view_proj_mat, ctx->view_mat );
+    
+    vec3_t sky_pos;
+    vec3_t sky_rot;
+    vec3_t sky_sca = { 16, 16, 16 };
+    vec3_t offset = { 16, 4, 0 };
+    m4x4_t xform;
+    
+    VectorSet ( sky_pos, 0, offset[0], offset[1] );
+    VectorSet ( sky_rot, 90, 0, 0 );
+    m4x4_identity(xform);
+    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, sky_pos );
+    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
+    
+    VectorSet ( sky_pos, 0, offset[0], offset[1] );
+    VectorSet ( sky_rot, 90, 0, -180 );
+    m4x4_identity(xform);
+    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, sky_pos );
+    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
+
+    VectorSet ( sky_pos, 0, offset[0], offset[1] );
+    VectorSet ( sky_rot, 90, 0, 90 );
+    m4x4_identity(xform);
+    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, sky_pos );
+    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
+    
+    VectorSet ( sky_pos, 0, -offset[0], offset[1] );
+    VectorSet ( sky_rot, 90, 0, -270 );
+    m4x4_identity(xform);
+    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, sky_pos );
+    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+    glCullFace ( GL_FRONT );
+    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
+    glCullFace ( GL_BACK );
+    
+    VectorSet ( sky_pos, 0, offset[0] + offset[1], 0 );
+    VectorSet ( sky_rot, 90, 90, 90 );
+    m4x4_identity(xform);
+    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, sky_pos );
+    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+    qb_render_plane ( ctx, wtx->skybox_gl_id[1], xform );
+    
+//    static int uno = 0;
+//    if ( !uno )
+//    {
+//    aabb_t aabb = { 0, 0, 0, 2, 2, 2 };
+//    qb_aabb_render_solid ( ctx, &aabb, wtx->skybox_gl_id[0], GL_BACK );
+//        uno = 1;
+//    }
 
     qb_qube_render_count = 0;
     qb_qube_render ( ctx, ctx->octree_root, 1 );
@@ -178,6 +275,8 @@ void qb_world_render ( context_t* ctx )
     //printf ( "render_count: %i\n", qb_qube_render_count );
     qb_cuboid_render ( ctx );
     //qb_octant_render ( ctx, ctx->octree_root, 1 );
+    
+    qb_spline_render ( ctx, wtx->spline );
 }
 
 void qb_world_zoom_end ( context_t* ctx )

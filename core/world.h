@@ -7,9 +7,15 @@
 
 extern const uint8_t QB_CTX_TYPE_WORLD;
 
+struct spline_t;
+
 typedef struct world_context_t {
     
     context_t ctx;
+    
+    struct spline_t* spline;
+    
+    GLuint skybox_gl_id[3];
     
 } world_context_t;
 

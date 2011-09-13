@@ -11,6 +11,7 @@
 		5708226E14191A6F00BB2009 /* qube.c in Sources */ = {isa = PBXBuildFile; fileRef = 5708226C14191A6F00BB2009 /* qube.c */; };
 		5708227114191D5200BB2009 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = 5708226F14191D5200BB2009 /* context.c */; };
 		5708227314191F5400BB2009 /* cuboid.c in Sources */ = {isa = PBXBuildFile; fileRef = 5708227214191F5400BB2009 /* cuboid.c */; };
+		572C1B2A141EF09D00F6A320 /* spline.c in Sources */ = {isa = PBXBuildFile; fileRef = 572C1B28141EF09D00F6A320 /* spline.c */; };
 		573AF42814023BC9005371E9 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = 573AF42614023BC9005371E9 /* io.c */; };
 		573BF07B13FF25B300E5B769 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 573BF07A13FF25B300E5B769 /* UIKit.framework */; };
 		573BF07D13FF25B300E5B769 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 573BF07C13FF25B300E5B769 /* Foundation.framework */; };
@@ -42,6 +43,8 @@
 		5708226C14191A6F00BB2009 /* qube.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = qube.c; path = ../core/qube.c; sourceTree = "<group>"; };
 		5708226F14191D5200BB2009 /* context.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = context.c; path = ../core/context.c; sourceTree = "<group>"; };
 		5708227214191F5400BB2009 /* cuboid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cuboid.c; path = ../core/cuboid.c; sourceTree = "<group>"; };
+		572C1B28141EF09D00F6A320 /* spline.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = spline.c; path = ../core/spline.c; sourceTree = "<group>"; };
+		572C1B2C141EF20A00F6A320 /* spline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spline.h; path = ../core/spline.h; sourceTree = "<group>"; };
 		573AF42614023BC9005371E9 /* io.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = io.c; path = ../core/io.c; sourceTree = "<group>"; };
 		573BF07613FF25B300E5B769 /* qubitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qubitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		573BF07A13FF25B300E5B769 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -165,6 +168,8 @@
 				5708226F14191D5200BB2009 /* context.c */,
 				5708226C14191A6F00BB2009 /* qube.c */,
 				57082268141917EA00BB2009 /* octant.c */,
+				572C1B28141EF09D00F6A320 /* spline.c */,
+				572C1B2C141EF20A00F6A320 /* spline.h */,
 				573AF42614023BC9005371E9 /* io.c */,
 				57CDBDB21408B50B0029C8CB /* render.c */,
 				57DEAD0A1404CA3700DC2E49 /* world.c */,
@@ -276,6 +281,7 @@
 				5708226E14191A6F00BB2009 /* qube.c in Sources */,
 				5708227114191D5200BB2009 /* context.c in Sources */,
 				5708227314191F5400BB2009 /* cuboid.c in Sources */,
+				572C1B2A141EF09D00F6A320 /* spline.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

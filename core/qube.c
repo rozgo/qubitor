@@ -144,8 +144,7 @@ void qb_qube_render ( context_t* ctx, octant_t* octant, uint8_t top )
             if ( octant->qube->gl_count > 0 )
             {
                 m4x4_t xform;
-                m4x4_identity( xform );
-                m4x4_translate_by_vec3 ( xform, octant->position );
+                m4x4_translation_for_vec3 ( xform, octant->position );
                 m4x4_translate_by_vec3 ( xform, octant->aabb.origin );
                 m4x4_rotate_by_vec3 ( xform, octant->rotation, eZYX );
                 m4x4_scale_by_vec3 ( xform, octant->scale );
