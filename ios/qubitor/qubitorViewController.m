@@ -363,6 +363,7 @@ CGFloat CGPointDist(CGPoint point1,CGPoint point2)
                 rotation[0] = ( touch0_ppos.y - touch0_cpos.y ) * dt * 15;
                 rotation[1] = ( touch0_cpos.x - touch0_ppos.x ) * dt * 15;
                 rotation[2] = 0;
+                rotation[0] = 0;
                 qb_camera_rotate ( world_ctx, rotation );
                 
                 rotation[0] = ( touch0_ppos.y - touch0_cpos.y ) * dt * 15;

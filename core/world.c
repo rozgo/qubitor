@@ -83,23 +83,23 @@ void qb_world_setup ( context_t* ctx )
     octant->qube = qube;
     octant->rotation[1] = 90;
     
-    qube = qb_qube_from_image ( "assets/grass" );
-    
-    int s = 8;
-    
-    for ( int x = -s; x <= s; ++x )
-    {
-        for ( int z = -s; z <= s; ++z )
-        {
-            pos[0] = x + 0.5f;
-            pos[1] = 1.5f;
-            pos[2] = z + 0.5f;
-            qb_octant_expand ( ctx->octree_root, pos, &octant );
-            assert ( octant );
-            octant->qube = qube;
-            octant->rotation[1] = rand() % 90 * 90;
-        }
-    }
+//    qube = qb_qube_from_image ( "assets/grass" );
+//    
+//    int s = 8;
+//    
+//    for ( int x = -s; x <= s; ++x )
+//    {
+//        for ( int z = -s; z <= s; ++z )
+//        {
+//            pos[0] = x + 0.5f;
+//            pos[1] = 1.5f;
+//            pos[2] = z + 0.5f;
+//            qb_octant_expand ( ctx->octree_root, pos, &octant );
+//            assert ( octant );
+//            octant->qube = qube;
+//            octant->rotation[1] = rand() % 90 * 90;
+//        }
+//    }
     
 
     vec3_t extents = { 10, 2, 10 };
@@ -109,6 +109,8 @@ void qb_world_setup ( context_t* ctx )
     
     wtx->skybox_gl_id[0] = qb_load_texture ( "assets/skybox_sides" );
     wtx->skybox_gl_id[1] = qb_load_texture ( "assets/skybox_top" );
+    
+    wtx->ground_gl_id = qb_load_texture ( "assets/ground" );
 }
 
 
@@ -158,7 +160,7 @@ void qb_world_render ( context_t* ctx )
     aabb_t ortho_trail;
     ortho_trail.extents[0] = ctx->ortho_extents_trail;
     ortho_trail.extents[1] = ortho_trail.extents[0] * view_ratio;
-    ortho_trail.extents[2] = 40;
+    ortho_trail.extents[2] = 100;
     ortho_trail.origin[0] = 0;
     ortho_trail.origin[1] = 0;
     ortho_trail.origin[2] = -ortho_trail.extents[2];   
@@ -181,7 +183,7 @@ void qb_world_render ( context_t* ctx )
         ctx->point_size = 1;
     }
     
-    vec3_t eye = { 0, 0, 20 };
+    vec3_t eye = { 0, 0, 50 };
     vec3_t look = { 0, 0, 0 };
     vec3_t up = { 0, 1, 0 };
     
@@ -207,58 +209,68 @@ void qb_world_render ( context_t* ctx )
     m4x4_multiply_by_m4x4 ( ctx->view_proj_mat, ctx->proj_mat );
     m4x4_multiply_by_m4x4 ( ctx->view_proj_mat, ctx->view_mat );
     
-    vec3_t sky_pos;
-    vec3_t sky_rot;
-    vec3_t sky_sca = { 16, 16, 16 };
-    vec3_t offset = { 16, 4, 0 };
+    vec3_t plane_pos;
+    vec3_t plane_rot;
+    vec3_t plane_sca = { 32, 32, 32 };
+    vec3_t offset = { 32, 32, 0 };
     m4x4_t xform;
     
-    VectorSet ( sky_pos, 0, offset[0], offset[1] );
-    VectorSet ( sky_rot, 90, 0, 0 );
+    VectorSet ( plane_pos, 0, offset[0], offset[1] );
+    VectorSet ( plane_rot, 90, 0, 0 );
     m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, sky_pos );
-    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, plane_pos );
+    m4x4_scale_by_vec3 ( xform, plane_sca );
     m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
     qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
     
-    VectorSet ( sky_pos, 0, offset[0], offset[1] );
-    VectorSet ( sky_rot, 90, 0, -180 );
+    VectorSet ( plane_pos, 0, offset[0], offset[1] );
+    VectorSet ( plane_rot, 90, 0, -180 );
     m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, sky_pos );
-    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, plane_pos );
+    m4x4_scale_by_vec3 ( xform, plane_sca );
     m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
     qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
 
-    VectorSet ( sky_pos, 0, offset[0], offset[1] );
-    VectorSet ( sky_rot, 90, 0, 90 );
+    VectorSet ( plane_pos, 0, offset[0], offset[1] );
+    VectorSet ( plane_rot, 90, 0, 90 );
     m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, sky_pos );
-    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, plane_pos );
+    m4x4_scale_by_vec3 ( xform, plane_sca );
     m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
     qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
     
-    VectorSet ( sky_pos, 0, -offset[0], offset[1] );
-    VectorSet ( sky_rot, 90, 0, -270 );
+    VectorSet ( plane_pos, 0, -offset[0], offset[1] );
+    VectorSet ( plane_rot, 90, 0, -270 );
     m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, sky_pos );
-    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, plane_pos );
+    m4x4_scale_by_vec3 ( xform, plane_sca );
     m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
     glCullFace ( GL_FRONT );
     qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
     glCullFace ( GL_BACK );
     
-    VectorSet ( sky_pos, 0, offset[0] + offset[1], 0 );
-    VectorSet ( sky_rot, 90, 90, 90 );
+    VectorSet ( plane_pos, 0, offset[0] + offset[1], 0 );
+    VectorSet ( plane_rot, 90, 90, 90 );
     m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, sky_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, sky_pos );
-    m4x4_scale_by_vec3 ( xform, sky_sca );
+    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, plane_pos );
+    m4x4_scale_by_vec3 ( xform, plane_sca );
     m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
     qb_render_plane ( ctx, wtx->skybox_gl_id[1], xform );
+    
+    VectorSet ( plane_pos, 0, 1, 0 );
+    VectorSet ( plane_rot, 0, 0, 0 );
+    //VectorSet ( plane_sca, 16, 16, 16 );
+    m4x4_identity(xform);
+    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+    m4x4_translate_by_vec3 ( xform, plane_pos );
+    m4x4_scale_by_vec3 ( xform, plane_sca );
+    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+    qb_render_plane ( ctx, wtx->ground_gl_id, xform );
     
 //    static int uno = 0;
 //    if ( !uno )

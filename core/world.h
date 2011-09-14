@@ -16,6 +16,7 @@ typedef struct world_context_t {
     struct spline_t* spline;
     
     GLuint skybox_gl_id[3];
+    GLuint ground_gl_id;
     
 } world_context_t;
 

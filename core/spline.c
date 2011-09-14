@@ -21,6 +21,18 @@ spline_t* qb_spline_from_random_elipse ( vec3_t extents, uint8_t num_points, vec
         spline->points[i][2] = cosf ( t ) * extents[2];
     }
     
+    for ( uint8_t i = 1; i < num_points; ++i )
+    {
+        if ( i % 3 == 0 )
+        {
+            vec3_t dir;
+            VectorSubtract ( spline->points[i+1], spline->points[i-1], dir );
+            float length = VectorNormalize ( dir, dir );
+            VectorScale ( dir, length / 2, dir );
+            VectorAdd ( spline->points[i-1], dir, spline->points[i] );
+        }
+    }
+    
     return spline;
 }
 
@@ -75,40 +87,41 @@ void qb_spline_render ( context_t* ctx, spline_t* spline )
     glVertexAttribPointer ( ATTRIB_POSITION, 3, GL_FLOAT, 0, sizeof ( vec4_t ), 0 );
     glEnableVertexAttribArray ( ATTRIB_POSITION );
     
-    vec4_t* color;
-    vec4_t green = { 0, 1, 0, 1 };
-    vec4_t red = { 1, 0, 0, 1 };
+//    vec4_t* color;
+//    vec4_t green = { 0, 1, 0, 1 };
+//    vec4_t red = { 1, 0, 0, 1 };
+//    
+//    for ( uint32_t i = 0; i < spline->num_points; ++i )
+//    {
+//        if ( i % 3 == 0 )
+//        {
+//            color = &green;
+//        }
+//        else
+//        {
+//            color = &red;
+//        }
+//        
+//        glLineWidth ( 10 );
+//        glUniform4fv ( qb_gl_uniforms[UNIFORM_LINE_COLOR], 1, *color );
+//        
+//        aabb_t aabb = { spline->points[i][0], spline->points[i][1], spline->points[i][2], 0.01f, 0.01f, 0.01f };
+//        
+//        m4x4_t xform;
+//        m4x4_identity ( xform );
+//        m4x4_translate_by_vec3 ( xform, spline->position );
+//        m4x4_rotate_by_vec3 ( xform, spline->rotation, eZYX );
+//        m4x4_scale_by_vec3 ( xform, spline->scale );
+//        m4x4_translate_by_vec3 ( xform, aabb.origin );
+//        m4x4_scale_by_vec3 ( xform, aabb.extents );
+//        m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+//        glUniformMatrix4fv ( qb_gl_uniforms[UNIFORM_MVP_MAT], 1, 0, xform );
+//        glDrawArrays ( GL_LINES, 0, 24 );
+//    }
+    
     vec4_t gray = { 0.7f, 0.7f, 0.7f, 1 };
     
-    for ( uint32_t i = 0; i < spline->num_points; ++i )
-    {
-        if ( i % 3 == 0 )
-        {
-            color = &green;
-        }
-        else
-        {
-            color = &red;
-        }
-        
-        glLineWidth ( 10 );
-        glUniform4fv ( qb_gl_uniforms[UNIFORM_LINE_COLOR], 1, *color );
-        
-        aabb_t aabb = { spline->points[i][0], spline->points[i][1], spline->points[i][2], 0.01f, 0.01f, 0.01f };
-        
-        m4x4_t xform;
-        m4x4_identity ( xform );
-        m4x4_translate_by_vec3 ( xform, spline->position );
-        m4x4_rotate_by_vec3 ( xform, spline->rotation, eZYX );
-        m4x4_scale_by_vec3 ( xform, spline->scale );
-        m4x4_translate_by_vec3 ( xform, aabb.origin );
-        m4x4_scale_by_vec3 ( xform, aabb.extents );
-        m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
-        glUniformMatrix4fv ( qb_gl_uniforms[UNIFORM_MVP_MAT], 1, 0, xform );
-        glDrawArrays ( GL_LINES, 0, 24 );
-    }
-    
-    glLineWidth ( 5 );
+    glLineWidth ( 2 );
     glUniform4fv ( qb_gl_uniforms[UNIFORM_LINE_COLOR], 1, gray );
     
     m4x4_t xform;
@@ -120,7 +133,7 @@ void qb_spline_render ( context_t* ctx, spline_t* spline )
     glUniformMatrix4fv ( qb_gl_uniforms[UNIFORM_MVP_MAT], 1, 0, xform );
     
     vec3_t points[4];
-    int samples = 5;
+    int samples = 10;
     vec3_t tpoints[spline->num_points / 3 * samples][2];
     
     int count = 0;
