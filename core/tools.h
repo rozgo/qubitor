@@ -40,8 +40,15 @@ typedef struct tools_context_t {
     
     u_int8_t mode;
     
+    int touch_moved;
+    octant_t* touch_picked;
+    vec3_t touch_plane;
+    vec3_t touch_start;
+    int touch_ticks;
+    
     octant_t* world_selected;
     cuboid_t* world_selected_glow;
+    vec3_t world_selected_plane;
     
     octant_t* model_selected;
     cuboid_t* model_selected_glow;
@@ -69,7 +76,10 @@ void qb_tools_mode_rot ( context_t* ctx );
 void qb_tools_library ( context_t* ctx, uint8_t show );
 void qb_tools_palette ( context_t* ctx, uint8_t show );
 
-void qb_tools_on_tap ( context_t* ctx, vec3_t screen_pos );
+void qb_tools_touch_began ( context_t* ctx, vec3_t screen_pos );
+void qb_tools_touch_moved ( context_t* ctx, vec3_t screen_pos );
+void qb_tools_touch_ended ( context_t* ctx, vec3_t screen_pos );
+
 void qb_tools_on_gamut ( context_t* ctx, vec3_t screen_pos );
 
 /// TODO: on/off wire

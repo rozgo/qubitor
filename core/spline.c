@@ -15,7 +15,6 @@ spline_t* qb_spline_from_random_elipse ( vec3_t extents, uint8_t num_points, vec
     for ( uint8_t i = 0; i < num_points; ++i )
     {
         float t = i / ( float )num_points * Q_PI * 2;
-        
         spline->points[i][0] = sinf ( t ) * cosf ( t ) * extents[0];
         spline->points[i][1] = sinf ( t * t ) * extents[1];
         spline->points[i][2] = cosf ( t ) * extents[2];
@@ -49,28 +48,18 @@ static void cubic_bezier_interpolate ( vec3_t out, vec3_t* points, float t )
 }
 
 void qb_spline_interpolate ( spline_t* spline, vec3_t out, float t )
-{    
+{
+    assert ( t >= 0 && t <= 1.0f );
+
     float w = spline->num_points / 3 * t;
     uint8_t i = w;
-    
-    assert ( t >= 0 && t <= 1.0f );
-//    
-//    if ( t > 1 )
-//    {
-//        VectorCopy ( spline->points[0], out );
-//        return;
-//    }
-    
-    float t0 = w - i;
-    
-    //printf ( "i: %i, t: %f\n", i, t0 );
-    
+    float t0 = w - i;    
     vec3_t points[4];
     
-    VectorCopy ( spline->points[i * 3 + 0], points[0] );
-    VectorCopy ( spline->points[i * 3 + 1], points[1] );
-    VectorCopy ( spline->points[i * 3 + 2], points[2] );
-    VectorCopy ( spline->points[i * 3 + 3], points[3] );
+    VectorCopy ( spline->points[i*3+0], points[0] );
+    VectorCopy ( spline->points[i*3+1], points[1] );
+    VectorCopy ( spline->points[i*3+2], points[2] );
+    VectorCopy ( spline->points[i*3+3], points[3] );
     if ( i * 3 + 3 == spline->num_points )
     {
         VectorCopy ( spline->points[0], points[3] );
@@ -140,10 +129,10 @@ void qb_spline_render ( context_t* ctx, spline_t* spline )
     
     for ( uint32_t i = 0; i < spline->num_points; i+=3 )
     {
-        VectorCopy ( spline->points[i + 0], points[0] );
-        VectorCopy ( spline->points[i + 1], points[1] );
-        VectorCopy ( spline->points[i + 2], points[2] );
-        VectorCopy ( spline->points[i + 3], points[3] );
+        VectorCopy ( spline->points[i+0], points[0] );
+        VectorCopy ( spline->points[i+1], points[1] );
+        VectorCopy ( spline->points[i+2], points[2] );
+        VectorCopy ( spline->points[i+3], points[3] );
         if ( i + 3 == spline->num_points )
         {
             VectorCopy ( spline->points[0], points[3] );

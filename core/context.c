@@ -49,7 +49,7 @@ void qb_screen_pick_ray ( context_t* ctx, const vec3_t screen_pos, ray_t* ray )
     ray->direction[2] = -ctx->view_mat[10];
 }
 
-int qb_pick_select ( context_t* ctx, const vec3_t screen_pos, octant_t** octant )
+int qb_pick_select ( context_t* ctx, const vec3_t screen_pos, octant_t** octant, vec3_t plane )
 {
     assert ( ctx );
     assert ( octant );
@@ -57,19 +57,29 @@ int qb_pick_select ( context_t* ctx, const vec3_t screen_pos, octant_t** octant 
     ray_t ray;
     qb_screen_pick_ray ( ctx, screen_pos, &ray );
     float dist = MAXFLOAT;
+    vec3_t hit;
     octant_t* picked = 0;
-    int plane;
-    qb_octant_intersect_ray ( ctx->octree_root, &ray, &dist, &plane, &picked );
+    int axis;
+    
+    qb_octant_intersect_ray ( ctx->octree_root, &ray, &dist, &axis, &picked );
     
     if ( picked && picked->qube )
     {
+        hit[0] = ray.origin[0] + ray.direction[0] * dist;
+        hit[1] = ray.origin[1] + ray.direction[1] * dist;
+        hit[2] = ray.origin[2] + ray.direction[2] * dist;
+        
+        float side = copysignf ( 1.0f, hit[axis] - picked->aabb.origin[axis] );
+        plane[0] = plane[1] = plane[2] = 0;
+        plane[axis] = side;
+        
         *octant = picked;
         return 1;
     }
     return 0;
 }
 
-int qb_pick_extrude ( context_t* ctx, const vec3_t screen_pos, octant_t** _octant )
+int qb_pick_extrude ( context_t* ctx, const vec3_t screen_pos, octant_t** _octant, vec3_t plane )
 {
     assert ( ctx );
     assert ( _octant );
@@ -80,8 +90,8 @@ int qb_pick_extrude ( context_t* ctx, const vec3_t screen_pos, octant_t** _octan
     float dist = MAXFLOAT;
     vec3_t hit;
     octant_t* picked = 0;
-    int plane;
-    qb_octant_intersect_ray ( ctx->octree_root, &ray, &dist, &plane, &picked );
+    int axis;
+    qb_octant_intersect_ray ( ctx->octree_root, &ray, &dist, &axis, &picked );
     
     if ( picked && picked->qube )
     {
@@ -92,12 +102,15 @@ int qb_pick_extrude ( context_t* ctx, const vec3_t screen_pos, octant_t** _octan
         hit[1] = ray.origin[1] + ray.direction[1] * dist;
         hit[2] = ray.origin[2] + ray.direction[2] * dist;
         
-        float side = copysignf ( 1.0f, hit[plane] - picked->aabb.origin[plane] );
+        float side = copysignf ( 1.0f, hit[axis] - picked->aabb.origin[axis] );
         vec3_t pos;
         pos[0] = picked->aabb.origin[0];
         pos[1] = picked->aabb.origin[1];
         pos[2] = picked->aabb.origin[2];
-        pos[plane] += side * 1;
+        pos[axis] += side;
+        
+        plane[0] = plane[1] = plane[2] = 0;
+        plane[axis] = side;
         
         octant_t* octant = 0;
         qb_octant_expand ( ctx->octree_root, pos, &octant );

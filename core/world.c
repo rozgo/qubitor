@@ -212,51 +212,51 @@ void qb_world_render ( context_t* ctx )
     vec3_t plane_pos;
     vec3_t plane_rot;
     vec3_t plane_sca = { 32, 32, 32 };
-    vec3_t offset = { 32, 32, 0 };
+//    vec3_t offset = { 32 + ctx->view_mat[12], 32 + ctx->view_mat[13], 0 + ctx->view_mat[14] };
     m4x4_t xform;
     
-    VectorSet ( plane_pos, 0, offset[0], offset[1] );
-    VectorSet ( plane_rot, 90, 0, 0 );
-    m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, plane_pos );
-    m4x4_scale_by_vec3 ( xform, plane_sca );
-    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
-    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
-    
-    VectorSet ( plane_pos, 0, offset[0], offset[1] );
-    VectorSet ( plane_rot, 90, 0, -180 );
-    m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, plane_pos );
-    m4x4_scale_by_vec3 ( xform, plane_sca );
-    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
-    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
-
-    VectorSet ( plane_pos, 0, offset[0], offset[1] );
-    VectorSet ( plane_rot, 90, 0, 90 );
-    m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, plane_pos );
-    m4x4_scale_by_vec3 ( xform, plane_sca );
-    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
-    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
-    
-    VectorSet ( plane_pos, 0, -offset[0], offset[1] );
-    VectorSet ( plane_rot, 90, 0, -270 );
-    m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
-    m4x4_translate_by_vec3 ( xform, plane_pos );
-    m4x4_scale_by_vec3 ( xform, plane_sca );
-    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
-    glCullFace ( GL_FRONT );
-    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
-    glCullFace ( GL_BACK );
-    
-    VectorSet ( plane_pos, 0, offset[0] + offset[1], 0 );
-    VectorSet ( plane_rot, 90, 90, 90 );
-    m4x4_identity(xform);
-    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+//    VectorSet ( plane_pos, offset[2], offset[0], offset[1] );
+//    VectorSet ( plane_rot, 90, 0, 0 );
+//    m4x4_identity(xform);
+//    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+//    m4x4_translate_by_vec3 ( xform, plane_pos );
+//    m4x4_scale_by_vec3 ( xform, plane_sca );
+//    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+//    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
+//    
+//    VectorSet ( plane_pos, offset[2], offset[0], offset[1] );
+//    VectorSet ( plane_rot, 90, 0, -180 );
+//    m4x4_identity(xform);
+//    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+//    m4x4_translate_by_vec3 ( xform, plane_pos );
+//    m4x4_scale_by_vec3 ( xform, plane_sca );
+//    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+//    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
+//
+//    VectorSet ( plane_pos, offset[2], offset[0], offset[1] );
+//    VectorSet ( plane_rot, 90, 0, 90 );
+//    m4x4_identity(xform);
+//    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+//    m4x4_translate_by_vec3 ( xform, plane_pos );
+//    m4x4_scale_by_vec3 ( xform, plane_sca );
+//    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+//    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
+//    
+//    VectorSet ( plane_pos, offset[2], -offset[0], offset[1] );
+//    VectorSet ( plane_rot, 90, 0, -270 );
+//    m4x4_identity(xform);
+//    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
+//    m4x4_translate_by_vec3 ( xform, plane_pos );
+//    m4x4_scale_by_vec3 ( xform, plane_sca );
+//    m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );
+//    glCullFace ( GL_FRONT );
+//    qb_render_plane ( ctx, wtx->skybox_gl_id[0], xform );
+//    glCullFace ( GL_BACK );
+//    
+//    VectorSet ( plane_pos, offset[2], offset[0] + offset[1], 0 );
+//    VectorSet ( plane_rot, 90, 90, 90 );
+//    m4x4_identity(xform);
+//    m4x4_rotate_by_vec3 ( xform, plane_rot, eZYX );
     m4x4_translate_by_vec3 ( xform, plane_pos );
     m4x4_scale_by_vec3 ( xform, plane_sca );
     m4x4_premultiply_by_m4x4 ( xform, ctx->view_proj_mat );

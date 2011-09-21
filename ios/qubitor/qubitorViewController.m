@@ -249,17 +249,14 @@ vec_t qb_timer_elapsed () {
     
     glEnable ( GL_DEPTH_TEST );
     glEnable ( GL_CULL_FACE );
-    glClearColor ( 1, 1, 1, 1 );
-//    glClearColor ( 80/255.0f, 150/255.0f, 250/255.0f, 1 );
+    //glClearColor ( 1, 1, 1, 1 );
+    glClearColor ( 80/255.0f, 150/255.0f, 250/255.0f, 1 );
     
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     qb_world_render ( world_ctx );
     
     glClear ( GL_DEPTH_BUFFER_BIT );
     qb_model_render ( model_ctx );
-    
-//    glClear ( GL_DEPTH_BUFFER_BIT );
-//    qb_gamut_render ( gamut_ctx );
     
     glClear ( GL_DEPTH_BUFFER_BIT );
     qb_tools_render ( tools_ctx );
@@ -280,15 +277,17 @@ vec_t qb_timer_elapsed () {
         CGPoint currPos = [touch locationInView:self.view];
         vec3_t screen_pos = { currPos.x, currPos.y, 0 };
         
-        octant_t* octant = 0;
-        if ( qb_pick_select ( world_ctx, screen_pos, &octant ) )
-        {
-            touchedWorld = octant;
-        }
-        else if ( qb_pick_select ( gamut_ctx, screen_pos, &octant ) )
-        {
-            touchedGamut = octant;
-        }
+        qb_tools_touch_began ( tools_ctx, screen_pos );
+        
+//        octant_t* octant = 0;
+//        if ( qb_pick_select ( world_ctx, screen_pos, &octant ) )
+//        {
+//            touchedWorld = octant;
+//        }
+//        else if ( qb_pick_select ( gamut_ctx, screen_pos, &octant ) )
+//        {
+//            touchedGamut = octant;
+//        }
     }
 }
 
@@ -308,15 +307,21 @@ CGFloat CGPointDist(CGPoint point1,CGPoint point2)
         UITouch* touch = [touches anyObject];
         CGPoint prevPos = [touch previousLocationInView:self.view];
         CGPoint currPos = [touch locationInView:self.view];
+        //vec3_t prev_screen_pos = { prevPos.x, prevPos.y, 0 };
         vec3_t screen_pos = { currPos.x, currPos.y, 0 };
+        
+        qb_tools_touch_moved ( tools_ctx, screen_pos );
         
         if ( touchedWorld )
         {
-            octant_t* octant = 0;
-            if ( qb_pick_select ( world_ctx, screen_pos, &octant ) )
-            {
-                //qb_tools_world_select ( tools_ctx, octant );
-            }
+            //qb_tools_touch_moved ( tools_ctx, screen_pos );
+            //qb_tools_on_swipe ( tools_ctx, prev_screen_pos, screen_pos );
+//            octant_t* octant = 0;
+//            if ( qb_pick_select ( world_ctx, screen_pos, &octant ) )
+//            {
+//                qb_tools_on_tap ( tools_ctx, screen_pos );
+//                //qb_tools_world_select ( tools_ctx, octant );
+//            }
         }
         else if ( touchedGamut )
         {
@@ -363,7 +368,7 @@ CGFloat CGPointDist(CGPoint point1,CGPoint point2)
                 rotation[0] = ( touch0_ppos.y - touch0_cpos.y ) * dt * 15;
                 rotation[1] = ( touch0_cpos.x - touch0_ppos.x ) * dt * 15;
                 rotation[2] = 0;
-                rotation[0] = 0;
+                //rotation[0] = 0;
                 qb_camera_rotate ( world_ctx, rotation );
                 
                 rotation[0] = ( touch0_ppos.y - touch0_cpos.y ) * dt * 15;
@@ -387,24 +392,24 @@ CGFloat CGPointDist(CGPoint point1,CGPoint point2)
     else if ( touches.count == 3 )
     {
         
-//        UITouch* touch = [touches anyObject];
-//        CGPoint prevPos = [touch previousLocationInView:self.view];
-//        CGPoint currPos = [touch locationInView:self.view];
-//        
-//        vec3_t front = { world_ctx->view_mat[2], 0, world_ctx->view_mat[10] };
-//        VectorNormalize( front, front );
-//        
-//        vec3_t right = { world_ctx->view_mat[0], 0, world_ctx->view_mat[8] };
-//        VectorNormalize( right, right );
-//        
-//        float dy = prevPos.y - currPos.y;
-//        float dx = prevPos.x - currPos.x;
-//        
-//        world_ctx->camera_target[2] += front[2] * dy * 0.1f;
-//        world_ctx->camera_target[0] += front[0] * dy * 0.1f;
-//        
-//        world_ctx->camera_target[2] += right[2] * dx * 0.1f;
-//        world_ctx->camera_target[0] += right[0] * dx * 0.1f;
+        UITouch* touch = [touches anyObject];
+        CGPoint prevPos = [touch previousLocationInView:self.view];
+        CGPoint currPos = [touch locationInView:self.view];
+        
+        vec3_t front = { world_ctx->view_mat[2], 0, world_ctx->view_mat[10] };
+        VectorNormalize( front, front );
+        
+        vec3_t right = { world_ctx->view_mat[0], 0, world_ctx->view_mat[8] };
+        VectorNormalize( right, right );
+        
+        float dy = ( prevPos.y - currPos.y ) * dt;
+        float dx = ( prevPos.x - currPos.x ) * dt;
+        
+        world_ctx->camera_target[2] += front[2] * dy;
+        world_ctx->camera_target[0] += front[0] * dy;
+        
+        world_ctx->camera_target[2] += right[2] * dx;
+        world_ctx->camera_target[0] += right[0] * dx;
         
         //model_ctx->camera_target[2] = world_ctx->camera_target[2];
         //model_ctx->camera_target[0] = world_ctx->camera_target[0];
@@ -420,14 +425,16 @@ CGFloat CGPointDist(CGPoint point1,CGPoint point2)
         CGPoint currPos = [touch locationInView:self.view];
         vec3_t screen_pos = { currPos.x, currPos.y, 0 };
         
-        if ( touchedGamut && !touchMoved )
-        {
-            qb_tools_on_gamut ( tools_ctx, screen_pos );
-        }
-        else if ( !touchMoved )
-        {
-            qb_tools_on_tap ( tools_ctx, screen_pos );
-        }
+        qb_tools_touch_ended ( tools_ctx, screen_pos );
+        
+//        if ( touchedGamut && !touchMoved )
+//        {
+//            qb_tools_on_gamut ( tools_ctx, screen_pos );
+//        }
+//        else if ( !touchMoved )
+//        {
+//            qb_tools_on_tap ( tools_ctx, screen_pos );
+//        }
     }
     
     qb_world_zoom_end ( world_ctx );

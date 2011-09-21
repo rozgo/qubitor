@@ -32,6 +32,16 @@ typedef GLubyte color_t[4];
 
 vec_t* color_normalize ( const color_t in_color, vec4_t out_color );
 
+typedef enum
+{
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST,
+    UP,
+    DOWN,
+} octant_side_t;
+
 enum
 {
     UNIFORM_MVP_MAT,
@@ -147,8 +157,8 @@ void qb_qube_render_solid ( context_t* ctx, octant_t* octant, uint8_t top );
 void qb_qube_render_wired ( context_t* ctx, octant_t* octant, uint8_t top );
 
 void qb_context_init ( context_t* ctx );
-int qb_pick_select ( context_t* ctx, const vec3_t screen_pos, octant_t** octant );
-int qb_pick_extrude ( context_t* ctx, const vec3_t screen_pos, octant_t** octant );
+int qb_pick_select ( context_t* ctx, const vec3_t screen_pos, octant_t** octant, vec3_t plane );
+int qb_pick_extrude ( context_t* ctx, const vec3_t screen_pos, octant_t** _octant, vec3_t plane );
 void qb_screen_pick_ray ( context_t* ctx, const vec3_t screen_pos, ray_t* ray );
 void qb_screen_to_world ( context_t* ctx, vec3_t pos, const vec3_t screen_pos );
 void qb_camera_rotate ( context_t* ctx, const vec3_t rotation );
@@ -157,7 +167,8 @@ void qb_octants_init ( uint32_t max_octants );
 octant_t* qb_octants_get_free ( void );
 void qb_octant_collapse ( octant_t* octant );
 void qb_octant_expand ( octant_t* parent, const vec3_t pos, octant_t** octant );
-void qb_octant_intersect_ray ( octant_t* parent, const ray_t* pick_ray, float* dist, int* plane, octant_t** qube );
+int qb_octant_extrude_plane ( context_t* ctx, octant_t* source, vec3_t plane, octant_t** _octant );
+void qb_octant_intersect_ray ( octant_t* parent, const ray_t* pick_ray, float* dist, int* axis, octant_t** qube );
 void qb_octant_intersect_point ( octant_t* parent, vec3_t point, octant_t** octant );
 void qb_octant_render ( context_t* ctx, octant_t* octant, uint8_t top );
 

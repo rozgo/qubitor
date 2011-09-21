@@ -179,23 +179,23 @@ void qb_octant_intersect_point ( octant_t* parent, vec3_t point, octant_t** octa
     }
 }
 
-void qb_octant_intersect_ray ( octant_t* parent, const ray_t* pick_ray, float* dist, int* plane, octant_t** qube )
+void qb_octant_intersect_ray ( octant_t* parent, const ray_t* pick_ray, float* dist, int* axis, octant_t** qube )
 {
     assert ( parent );
     assert ( pick_ray );
     assert ( dist );
-    assert ( plane );
+    assert ( axis );
     assert ( qube );
     
     float local_dist;
-    int local_plane;
+    int local_axis;
     
-    if ( aabb_intersect_ray ( &parent->aabb, pick_ray, &local_dist, &local_plane ) )
+    if ( aabb_intersect_ray ( &parent->aabb, pick_ray, &local_dist, &local_axis ) )
     {
         if ( parent->qube && local_dist < *dist )
         {
             *dist = local_dist;
-            *plane = local_plane;
+            *axis = local_axis;
             *qube = parent;
         }
         
@@ -203,10 +203,48 @@ void qb_octant_intersect_ray ( octant_t* parent, const ray_t* pick_ray, float* d
         {
             if ( parent->octants[i] )
             {
-                qb_octant_intersect_ray ( parent->octants[i], pick_ray, dist, plane, qube );
+                qb_octant_intersect_ray ( parent->octants[i], pick_ray, dist, axis, qube );
             }
         }
     }
+}
+
+int qb_octant_extrude_plane ( context_t* ctx, octant_t* source, vec3_t plane, octant_t** _octant )
+{
+    assert ( ctx );
+    assert ( _octant );
+    
+    if ( source && source->qube )
+    {
+        static color_t dark_green = { 0, 128, 0, 255 };
+        qb_cuboid_draw ( ctx, &source->aabb, dark_green, 3, 0.3f );
+        
+        vec3_t pos;
+        pos[0] = source->aabb.origin[0] + plane[0];
+        pos[1] = source->aabb.origin[1] + plane[1];
+        pos[2] = source->aabb.origin[2] + plane[2];
+        
+        octant_t* octant = 0;
+        qb_octant_expand ( ctx->octree_root, pos, &octant );
+        if ( &octant )
+        {
+            *_octant = octant;
+            octant->qube = source->qube;
+            octant->flags = source->flags;
+            VectorCopy ( source->rotation, octant->rotation );
+            VectorCopy ( source->position, octant->position );
+            VectorCopy ( source->scale, octant->scale );
+            octant->color[0] = source->color[0];
+            octant->color[1] = source->color[1];
+            octant->color[2] = source->color[2];
+            octant->color[3] = source->color[3];
+            
+            static color_t bright_green = { 0, 255, 0, 255 };
+            qb_cuboid_draw ( ctx, &octant->aabb, bright_green, 3, 0.5f );
+            return 1;
+        }
+    }
+    return 0;
 }
 
 void qb_octant_render ( context_t* ctx, octant_t* octant, uint8_t top )
