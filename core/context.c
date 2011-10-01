@@ -145,4 +145,76 @@ void qb_camera_rotate ( context_t* ctx, const vec3_t rotation )
     ctx->camera_rot[1] += rotation[1];
 }
 
+void qb_context_select ( context_t* ctx, octant_t* octant )
+{
+    if ( ctx->selection.head )
+    {
+        octant_t* next = ctx->selection.head;
+        while ( next )
+        {
+            if ( next == octant ) return;
+            next = next->next_selected;
+        }
+        octant->next_selected = ctx->selection.head;
+    }
+    
+    ctx->selection.head = octant;
+    
+    vec3_t min_point = { FLT_MAX, FLT_MAX, FLT_MAX };
+    vec3_t max_point = { FLT_MIN, FLT_MIN, FLT_MIN };
+    octant_t* chain = ctx->selection.head;
+    do
+    {
+        for ( int i=0; i<3; ++i )
+        {
+            if ( ( chain->aabb.origin[i] - chain->aabb.extents[i] ) < min_point[i] )
+            {
+                min_point[i] = chain->aabb.origin[i] - chain->aabb.extents[i];
+            }
+            if ( ( chain->aabb.origin[i] + chain->aabb.extents[i] ) > max_point[i] )
+            {
+                max_point[i] = chain->aabb.origin[i] + chain->aabb.extents[i];
+            }
+        }
+        chain = chain->next_selected;
+    }
+    while ( chain );
+    
+    color_t bright_green = { 0, 255, 0, 255 };
+    if ( ctx->selection.glow != 0 )
+    {
+        ctx->selection.glow->timer = 0.1f;
+    }
+    
+    if ( octant )
+    {
+        aabb_t aabb = { 
+            min_point[0] + ( max_point[0] - min_point[0] ) / 2,
+            min_point[1] + ( max_point[1] - min_point[1] ) / 2,
+            min_point[2] + ( max_point[2] - min_point[2] ) / 2,
+            ( max_point[0] - min_point[0] ) / 2,
+            ( max_point[1] - min_point[1] ) / 2,
+            ( max_point[2] - min_point[2] ) / 2
+        };
+        ctx->selection.glow = qb_cuboid_draw ( ctx, &aabb, bright_green, 3, -1 );
+    }
+}
+
+void qb_context_deselect ( context_t* ctx, octant_t* octant )
+{
+    octant_t* prev = octant;
+    while ( prev ) 
+    {
+        octant_t* next = prev->next_selected;
+        prev->next_selected = 0;
+        prev = next;
+    }
+    ctx->selection.head = 0;
+    
+    if ( ctx->selection.glow != 0 )
+    {
+        ctx->selection.glow->timer = 0.1f;
+    }
+    ctx->selection.glow = 0;
+}
 

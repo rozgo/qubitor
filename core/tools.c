@@ -83,118 +83,6 @@ void qb_tools_setup ( context_t* ctx )
     qb_tools_palette ( ctx, 0 );
 }
 
-void qb_tools_world_select ( context_t* ctx, octant_t* octant )
-{
-    assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_TOOLS );
-    tools_context_t* ttx = ( tools_context_t* )ctx;
-    
-    if ( ttx->world_selected )
-    {
-        octant_t* next = ttx->world_selected;
-        while ( next )
-        {
-            if ( next == octant ) return;
-            next = next->next_selected;
-        }
-        octant->next_selected = ttx->world_selected;
-    }
-    
-    ttx->world_selected = octant;
-    
-    vec3_t min_point = { FLT_MAX, FLT_MAX, FLT_MAX };
-    vec3_t max_point = { FLT_MIN, FLT_MIN, FLT_MIN };
-    octant_t* chain = ttx->world_selected;
-    do
-    {
-        for ( int i=0; i<3; ++i )
-        {
-            if ( ( chain->aabb.origin[i] - chain->aabb.extents[i] ) < min_point[i] )
-            {
-                min_point[i] = chain->aabb.origin[i] - chain->aabb.extents[i];
-            }
-            if ( ( chain->aabb.origin[i] + chain->aabb.extents[i] ) > max_point[i] )
-            {
-                max_point[i] = chain->aabb.origin[i] + chain->aabb.extents[i];
-            }
-        }
-        chain = chain->next_selected;
-    }
-    while ( chain );
-    
-    color_t bright_green = { 0, 255, 0, 255 };
-    if ( ttx->world_selected_glow != 0 )
-    {
-        ttx->world_selected_glow->timer = 0.1f;
-    }
-    if ( octant )
-    {
-        aabb_t aabb = { 
-            min_point[0] + ( max_point[0] - min_point[0] ) / 2,
-            min_point[1] + ( max_point[1] - min_point[1] ) / 2,
-            min_point[2] + ( max_point[2] - min_point[2] ) / 2,
-            ( max_point[0] - min_point[0] ) / 2,
-            ( max_point[1] - min_point[1] ) / 2,
-            ( max_point[2] - min_point[2] ) / 2
-        };
-        ttx->world_selected_glow = qb_cuboid_draw ( ttx->world_ctx, &aabb, bright_green, 3, -1 );
-    }
-}
-
-void qb_tools_model_select ( context_t* ctx, octant_t* octant )
-{
-    assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_TOOLS );
-    tools_context_t* ttx = ( tools_context_t* )ctx;
-    
-    ttx->model_selected = octant;
-    color_t bright_green = { 0, 255, 0, 255 };
-    if ( ttx->model_selected_glow != 0 )
-    {
-        ttx->model_selected_glow->timer = 0.1f;
-    }
-    if ( octant )
-    {
-        ttx->model_selected_glow = qb_cuboid_draw ( ttx->model_ctx, &octant->aabb, bright_green, 3, -1 );
-    }
-}
-
-void qb_tools_world_deselect ( context_t* ctx, octant_t* octant )
-{
-    assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_TOOLS );
-    tools_context_t* ttx = ( tools_context_t* )ctx;
-    
-    octant_t* prev = octant;
-    while ( prev ) 
-    {
-        octant_t* next = prev->next_selected;
-        prev->next_selected = 0;
-        prev = next;
-    }
-    ttx->world_selected = 0;
-    
-    if ( ttx->world_selected_glow != 0 )
-    {
-        ttx->world_selected_glow->timer = 0.1f;
-    }
-    ttx->world_selected_glow = 0;
-}
-
-void qb_tools_model_deselect ( context_t* ctx, octant_t* octant )
-{
-    assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_TOOLS );
-    tools_context_t* ttx = ( tools_context_t* )ctx;
-    
-    if ( octant != 0 && octant != ttx->model_selected )
-    {
-        return;
-    }
-    ttx->model_selected = 0;
-    if ( ttx->model_selected_glow != 0 )
-    {
-        ttx->model_selected_glow->timer = 0.1f;
-    }
-    ttx->model_selected_glow = 0;
-}
-
 void qb_tools_pick ( context_t* ctx, octant_t* octant )
 {
     assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_TOOLS );
@@ -307,16 +195,16 @@ void qb_tools_palette ( context_t* ctx, uint8_t show )
     {
         ttx->octants[TOOLS_BTN_PAL]->qube = ttx->buttons[TOOLS_BTN_PAL];
         ttx->palette_on = 1;
-        if ( ttx->world_selected )
+        if ( ttx->world_ctx->selection.head )
         {
             VectorCopy ( ttx->world_ctx->camera_rot, ttx->model_ctx->camera_rot );
-            VectorIncrement ( ttx->world_selected->rotation, ttx->model_ctx->camera_rot );
+            VectorIncrement ( ttx->world_ctx->selection.head->rotation, ttx->model_ctx->camera_rot );
             VectorCopy ( ttx->model_ctx->camera_rot, ttx->model_ctx->camera_rot_trail );
             
             ttx->model_ctx->ortho_extents_trail = ttx->world_ctx->ortho_aabb.extents[0] * 16;
             ttx->model_ctx->ortho_aabb.extents[0] = 11;
             
-            qb_model_set ( ttx->model_ctx, ttx->world_selected );
+            qb_model_set ( ttx->model_ctx, ttx->world_ctx->selection.head );
         }
     }
     else
@@ -328,7 +216,7 @@ void qb_tools_palette ( context_t* ctx, uint8_t show )
         ttx->model_ctx->ortho_aabb.extents[1] = ttx->world_ctx->ortho_aabb.extents[0] * 16 * view_ratio;
         
         qb_model_set ( ttx->model_ctx, 0 );
-        qb_tools_model_deselect ( ctx, ttx->model_selected );
+        qb_context_deselect ( ctx, ttx->model_ctx->selection.head );
         qb_tools_mode_sel ( ctx );
     }
 }
@@ -372,14 +260,19 @@ void qb_tools_render ( context_t* ctx )
 void qb_tools_touch_began ( context_t* ctx, vec3_t screen_pos )
 {
     assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_TOOLS );
-    tools_context_t* ttx = (tools_context_t*)ctx;
-//    octant_t* octant = 0;
-//    vec3_t plane;
-    
+    tools_context_t* ttx = (tools_context_t*)ctx;    
     ttx->touch_ticks = 0;
     ttx->touch_picked = 0;
     VectorCopy ( screen_pos, ttx->touch_start );
-    qb_pick_select ( ttx->world_ctx, screen_pos, &ttx->touch_picked, ttx->touch_plane );
+    
+    if ( !ttx->palette_on )
+    {
+        qb_pick_select ( ttx->world_ctx, screen_pos, &ttx->touch_picked, ttx->touch_plane );
+    }
+    else
+    {
+        qb_pick_select ( ttx->model_ctx, screen_pos, &ttx->touch_picked, ttx->touch_plane );
+    }
 }
 
 void qb_tools_touch_moved ( context_t* ctx, vec3_t screen_pos )
@@ -392,21 +285,25 @@ void qb_tools_touch_moved ( context_t* ctx, vec3_t screen_pos )
     ttx->touch_moved = 1;
     
     float w = 40 - ttx->world_ctx->ortho_aabb.extents[0];
+    if ( ttx->palette_on )
+    {
+        w = 40 - ttx->model_ctx->ortho_aabb.extents[0];
+    }
     int threshold = 0;
     vec3_t touch_dt;
     VectorSubtract ( screen_pos, ttx->touch_start, touch_dt );
     touch_dt[1] *= -1;
     float move_dist = VectorNormalize ( touch_dt, touch_dt );
     
-    vec3_t world_start;
-    vec3_t world_end;
-    vec3_t world_dt;
-    qb_screen_to_world ( ttx->world_ctx, world_start, ttx->touch_start );
-    qb_screen_to_world ( ttx->world_ctx, world_end, screen_pos );
-    VectorSubtract ( world_end, world_start, world_dt );
-    VectorNormalize ( world_dt, world_dt );
+    vec3_t w_start;
+    vec3_t w_end;
+    vec3_t w_dt;
+    qb_screen_to_world ( ttx->world_ctx, w_start, ttx->touch_start );
+    qb_screen_to_world ( ttx->world_ctx, w_end, screen_pos );
+    VectorSubtract ( w_end, w_start, w_dt );
+    VectorNormalize ( w_dt, w_dt );
     
-    if ( move_dist / w > ttx->touch_ticks && DotProduct ( ttx->touch_plane, world_dt ) > 0.3f )
+    if ( move_dist / w > ttx->touch_ticks && DotProduct ( ttx->touch_plane, w_dt ) > 0.3f )
     {
         threshold = 1;
         ++ttx->touch_ticks;
@@ -420,13 +317,16 @@ void qb_tools_touch_moved ( context_t* ctx, vec3_t screen_pos )
                 qb_pick_select ( ttx->world_ctx, screen_pos, &octant, plane );
                 if ( octant )
                 {
-                    qb_tools_world_select ( ctx, octant );
+                    qb_context_select ( ttx->world_ctx, octant );
                 }
             }
             else
             {
                 qb_pick_select ( ttx->model_ctx, screen_pos, &octant, plane );
-                qb_tools_model_select ( ctx, octant );
+                if ( octant )
+                {
+                    qb_context_select ( ttx->model_ctx, octant );
+                }
             }
         }
         else if ( ttx->mode == TOOLS_MODE_ADD ) {
@@ -435,20 +335,23 @@ void qb_tools_touch_moved ( context_t* ctx, vec3_t screen_pos )
                 if ( threshold )
                 {
                     qb_octant_extrude_plane ( ttx->world_ctx, ttx->touch_picked, ttx->touch_plane, &octant );
-                    //qb_pick_extrude ( ttx->world_ctx, screen_pos, &octant, plane );
                     if ( octant )
                     {
-                        qb_tools_world_select ( ctx, octant );
+                        qb_context_select ( ttx->world_ctx, octant );
                     }
-                    ttx->touch_picked = ttx->world_selected;
+                    ttx->touch_picked = ttx->world_ctx->selection.head;
                 }
             }
             else
             {
-                qb_pick_extrude ( ttx->model_ctx, screen_pos, &octant, plane );
-                if ( octant )
+                if ( threshold )
                 {
-                    qb_tools_model_select ( ctx, octant );
+                    qb_octant_extrude_plane ( ttx->model_ctx, ttx->touch_picked, ttx->touch_plane, &octant );
+                    if ( octant )
+                    {
+                        qb_context_select ( ttx->model_ctx, octant );
+                    }
+                    ttx->touch_picked = ttx->model_ctx->selection.head;
                 }
             }
         }
@@ -458,9 +361,8 @@ void qb_tools_touch_moved ( context_t* ctx, vec3_t screen_pos )
                 qb_pick_select ( ttx->world_ctx, screen_pos, &octant, plane );
                 if ( octant )
                 {
-                    qb_tools_world_deselect ( ctx, octant );
+                    qb_context_deselect ( ttx->world_ctx, octant );
                     qb_octant_collapse ( octant );
-                    //printf ( "octant count: %i\n", ttx->world_ctx->octants_count );
                 }
             }
             else
@@ -468,7 +370,7 @@ void qb_tools_touch_moved ( context_t* ctx, vec3_t screen_pos )
                 qb_pick_select ( ttx->model_ctx, screen_pos, &octant, plane );
                 if ( octant )
                 {
-                    qb_tools_model_deselect ( ctx, octant );
+                    qb_context_deselect ( ttx->model_ctx, octant );
                     qb_octant_collapse ( octant );
                 }
             }
@@ -491,29 +393,32 @@ void qb_tools_touch_ended ( context_t* ctx, vec3_t screen_pos )
         else if ( ttx->mode == TOOLS_MODE_SEL ) {
             if ( !ttx->palette_on )
             {
-                qb_tools_world_deselect ( ctx, ttx->world_selected );
+                qb_context_deselect ( ttx->world_ctx, ttx->world_ctx->selection.head );
                 qb_pick_select ( ttx->world_ctx, screen_pos, &octant, plane );
                 if ( octant )
                 {
-                    qb_tools_world_select ( ctx, octant );
+                    qb_context_select ( ttx->world_ctx, octant );
                     VectorCopy ( octant->aabb.origin, ttx->world_ctx->camera_target );
                 }
             }
             else
             {
+                qb_context_deselect ( ttx->model_ctx, ttx->model_ctx->selection.head );
                 qb_pick_select ( ttx->model_ctx, screen_pos, &octant, plane );
-                qb_tools_model_select ( ctx, octant );
+                if ( octant )
+                {
+                    qb_context_select ( ttx->model_ctx, octant );
+                }
             }
         }
         else if ( ttx->mode == TOOLS_MODE_ADD ) {
             if ( !ttx->palette_on )
             {
-                qb_pick_extrude ( ttx->world_ctx, screen_pos, &octant, ttx->world_selected_plane );
+                qb_pick_extrude ( ttx->world_ctx, screen_pos, &octant, ttx->world_ctx->selection.plane );
                 if ( octant )
                 {
-                    //VectorCopy ( octant->aabb.origin, ttx->world_ctx->camera_target );
-                    qb_tools_world_deselect ( ctx, ttx->world_selected );
-                    qb_tools_world_select ( ctx, octant );
+                    qb_context_deselect ( ttx->world_ctx, ttx->world_ctx->selection.head );
+                    qb_context_select ( ttx->world_ctx, octant );
                 }
             }
             else
@@ -521,7 +426,8 @@ void qb_tools_touch_ended ( context_t* ctx, vec3_t screen_pos )
                 qb_pick_extrude ( ttx->model_ctx, screen_pos, &octant, plane );
                 if ( octant )
                 {
-                    qb_tools_model_select ( ctx, octant );
+                    qb_context_deselect ( ttx->model_ctx, ttx->model_ctx->selection.head );
+                    qb_context_select ( ttx->model_ctx, octant );
                 }
             }
         }
@@ -531,9 +437,8 @@ void qb_tools_touch_ended ( context_t* ctx, vec3_t screen_pos )
                 qb_pick_select ( ttx->world_ctx, screen_pos, &octant, plane );
                 if ( octant )
                 {
-                    qb_tools_world_deselect ( ctx, octant );
+                    qb_context_deselect ( ttx->world_ctx, octant );
                     qb_octant_collapse ( octant );
-                    //printf ( "octant count: %i\n", ttx->world_ctx->octants_count );
                 }
             }
             else
@@ -541,7 +446,7 @@ void qb_tools_touch_ended ( context_t* ctx, vec3_t screen_pos )
                 qb_pick_select ( ttx->model_ctx, screen_pos, &octant, plane );
                 if ( octant )
                 {
-                    qb_tools_model_deselect ( ctx, octant );
+                    qb_context_deselect ( ttx->model_ctx, octant );
                     qb_octant_collapse ( octant );
                 }
             }
@@ -556,9 +461,9 @@ void qb_tools_on_gamut ( context_t* ctx, vec3_t screen_pos )
     assert ( ctx && ctx->ctx_type == QB_CTX_TYPE_TOOLS );
     tools_context_t* ttx = ( tools_context_t* )ctx;
 
-    if ( ttx->model_selected )
+    if ( ttx->model_ctx->selection.head )
     {
-        qb_gamut_pick ( ttx->gamut_ctx, screen_pos, ttx->model_selected->color );
+        qb_gamut_pick ( ttx->gamut_ctx, screen_pos, ttx->model_ctx->selection.head->color );
     }
 
 }

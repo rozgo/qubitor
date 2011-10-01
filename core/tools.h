@@ -46,12 +46,13 @@ typedef struct tools_context_t {
     vec3_t touch_start;
     int touch_ticks;
     
-    octant_t* world_selected;
-    cuboid_t* world_selected_glow;
-    vec3_t world_selected_plane;
-    
-    octant_t* model_selected;
-    cuboid_t* model_selected_glow;
+//    octant_t* world_selected;
+//    cuboid_t* world_selected_glow;
+//    vec3_t world_selected_plane;
+//    
+//    octant_t* model_selected;
+//    cuboid_t* model_selected_glow;
+//    vec3_t model_selected_plane;
     
     uint8_t palette_on;
     uint8_t library_on;
@@ -62,10 +63,10 @@ tools_context_t* qb_tools_context_create ( void );
 void qb_tools_setup ( context_t* ctx );
 void qb_tools_render ( context_t* ctx );
 
-void qb_tools_world_select ( context_t* ctx, octant_t* octant );
-void qb_tools_model_select ( context_t* ctx, octant_t* octant );
-void qb_tools_world_deselect ( context_t* ctx, octant_t* octant );
-void qb_tools_model_deselect ( context_t* ctx, octant_t* octant );
+//void qb_tools_world_select ( context_t* ctx, octant_t* octant );
+//void qb_tools_model_select ( context_t* ctx, octant_t* octant );
+//void qb_tools_world_deselect ( context_t* ctx, octant_t* octant );
+//void qb_tools_model_deselect ( context_t* ctx, octant_t* octant );
 void qb_tools_pick ( context_t* ctx, octant_t* octant );
 
 void qb_tools_mode_sel ( context_t* ctx );

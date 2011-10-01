@@ -117,6 +117,14 @@ typedef struct cuboid_t
     
 } cuboid_t;
 
+typedef struct selection_t {
+    
+    octant_t* head;
+    cuboid_t* glow;
+    vec3_t plane;
+    
+} selection_t;
+
 typedef struct context_t
 {
     m4x4_t model_mat;
@@ -144,6 +152,8 @@ typedef struct context_t
     
     float point_size;
     
+    selection_t selection;
+    
     uint8_t ctx_type;
     
 } context_t;
@@ -157,6 +167,8 @@ void qb_qube_render_solid ( context_t* ctx, octant_t* octant, uint8_t top );
 void qb_qube_render_wired ( context_t* ctx, octant_t* octant, uint8_t top );
 
 void qb_context_init ( context_t* ctx );
+void qb_context_select ( context_t* ctx, octant_t* octant );
+void qb_context_deselect ( context_t* ctx, octant_t* octant );
 int qb_pick_select ( context_t* ctx, const vec3_t screen_pos, octant_t** octant, vec3_t plane );
 int qb_pick_extrude ( context_t* ctx, const vec3_t screen_pos, octant_t** _octant, vec3_t plane );
 void qb_screen_pick_ray ( context_t* ctx, const vec3_t screen_pos, ray_t* ray );
